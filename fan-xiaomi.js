@@ -98,7 +98,6 @@ class FanXiaomi extends HTMLElement {
       }
       ui.querySelector('.var-natural').onclick = () => {
         //this.log('Natural')
-        let nowspeed = attrs['direct_speed'];
         let u = ui.querySelector('.var-natural')
         if (u.classList.contains('active') === false) {
           u.classList.add('active')
@@ -106,20 +105,11 @@ class FanXiaomi extends HTMLElement {
           hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
               entity_id: entityId
           });
-          hass.callService('fan', 'SET_SPEED', {
-            entity_id: entityId,
-            speed: nowspeed
-          });
         }else{
           u.classList.remove('active')
           u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
             hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
                 entity_id: entityId
-            });
-            nowspeed = attrs['natural_speed'];
-            hass.callService('fan', 'SET_SPEED', {
-              entity_id: entityId,
-              speed: nowspeed
             });
 
         }
