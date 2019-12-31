@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @Author        : fineemb
  * @Github        : https://github.com/fineemb
  * @Description   : 
@@ -51,7 +51,7 @@ class FanXiaomi extends HTMLElement {
       }
       ui.querySelector('.left').onclick = () => {
         this.log('左转5度')
-        if(state==="on"){
+        if(state.state === "on"){
           hass.callService('fan', 'set_direction', {
             entity_id: entityId,
             direction: "left"
@@ -66,7 +66,7 @@ class FanXiaomi extends HTMLElement {
       }
       ui.querySelector('.right').onclick = () => {
         this.log('左转5度')
-        if(state==="on"){
+        if(state.state === "on"){
           hass.callService('fan', 'set_direction', {
             entity_id: entityId,
             direction: "right"
