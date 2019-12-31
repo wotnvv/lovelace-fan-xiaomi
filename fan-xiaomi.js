@@ -143,7 +143,8 @@ class FanXiaomi extends HTMLElement {
       state: state.state,
       child_lock: attrs['child_lock'],
       oscillating: attrs['oscillating'],
-      led_brightness: attrs['led_brightness']
+      led_brightness: attrs['led_brightness'],
+      delay_off_countdown: attrs['delay_off_countdown']
     })
   }
 
@@ -272,8 +273,8 @@ to{transform:perspective(10em) rotateY(40deg)}
   <p class="attr-value var-temperature">30</p>
 </div>
 <div class="attr">
-  <p class="attr-title">Humidity(%)</p>
-  <p class="attr-value var-humidity">30</p>
+  <p class="attr-title">Timer(s)</p>
+  <p class="attr-value var-timer">0</p>
 </div>
 </div>
 <div class="op-row">
@@ -308,14 +309,15 @@ to{transform:perspective(10em) rotateY(40deg)}
 
 // 设置UI值
 setUI(fanboxa, {title, natural_speed, speed_level, state,
-    child_lock, oscillating, led_brightness
+    child_lock, oscillating, led_brightness, delay_off_countdown
       //buzzer,angle,speed_level,led_brightness
     }) {
 
 fanboxa.querySelector('.var-title').textContent = title
 fanboxa.querySelector('.var-speed').textContent = speed_level
 fanboxa.querySelector('.var-temperature').textContent = "--"
-fanboxa.querySelector('.var-humidity').textContent = "--"
+fanboxa.querySelector('.var-timer').textContent = delay_off_countdown
+
   //LED
   let activeElement = fanboxa.querySelector('.c3')
   if (led_brightness < 2) {
