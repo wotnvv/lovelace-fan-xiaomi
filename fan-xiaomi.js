@@ -31,11 +31,8 @@ class FanXiaomi extends HTMLElement {
     }
 
     const attrs = state.attributes;
-    const temperature = attrs['temperature'] || "--";
-    const humidity = attrs['humidity'] || "--";
 
     if (!this.card) {
-
       const card = document.createElement('ha-card');
       card.className = 'fan-xiaomi'
 
@@ -141,11 +138,8 @@ class FanXiaomi extends HTMLElement {
     //设置值更新UI
     this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
       title: myname || attrs['friendly_name'],
-      battery: attrs['battery'] || "--",
       natural_speed: attrs['natural_speed'],
       speed_level: attrs['speed_level'],
-      temperature: temperature,
-      humidity: humidity,
       state: state.state,
       child_lock: attrs['child_lock'],
       oscillating: attrs['oscillating'],
@@ -313,16 +307,15 @@ to{transform:perspective(10em) rotateY(40deg)}
 }
 
 // 设置UI值
-setUI(fanboxa, { title, battery,
-     natural_speed,temperature,humidity,
-      state,child_lock,oscillating,led_brightness
+setUI(fanboxa, {title, natural_speed, speed_level, state,
+    child_lock, oscillating, led_brightness
       //buzzer,angle,speed_level,led_brightness
     }) {
 
 fanboxa.querySelector('.var-title').textContent = title
-fanboxa.querySelector('.var-battery').textContent = battery
-fanboxa.querySelector('.var-temperature').textContent = temperature
-fanboxa.querySelector('.var-humidity').textContent = humidity
+fanboxa.querySelector('.var-battery').textContent = speed_level
+fanboxa.querySelector('.var-temperature').textContent = "--"
+fanboxa.querySelector('.var-humidity').textContent = "--"
   //LED
   let activeElement = fanboxa.querySelector('.c3')
   if (led_brightness < 2) {
@@ -367,7 +360,6 @@ fanboxa.querySelector('.var-humidity').textContent = humidity
   activeElement = fanboxa.querySelector('.var-oscillating')
   let fb = fanboxa.querySelector('.fanbox')
   if (oscillating) {
-
     if (fb.classList.contains('oscillat') === false) {
         fb.classList.add('oscillat')
       }
