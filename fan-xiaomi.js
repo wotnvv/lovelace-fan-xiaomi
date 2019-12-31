@@ -144,7 +144,8 @@ class FanXiaomi extends HTMLElement {
       child_lock: attrs['child_lock'],
       oscillating: attrs['oscillating'],
       led_brightness: attrs['led_brightness'],
-      delay_off_countdown: attrs['delay_off_countdown']
+      delay_off_countdown: attrs['delay_off_countdown'],
+      angle: attrs['angle']
     })
   }
 
@@ -269,8 +270,8 @@ to{transform:perspective(10em) rotateY(40deg)}
   <p class="attr-value var-speed">0</p>
 </div>
 <div class="attr">
-  <p class="attr-title">Temp(&#8451;)</p>
-  <p class="attr-value var-temperature">30</p>
+  <p class="attr-title">Angle(&deg;)</p>
+  <p class="attr-value var-angle">120</p>
 </div>
 <div class="attr">
   <p class="attr-title">Timer</p>
@@ -309,13 +310,13 @@ to{transform:perspective(10em) rotateY(40deg)}
 
 // 设置UI值
 setUI(fanboxa, {title, natural_speed, speed_level, state,
-    child_lock, oscillating, led_brightness, delay_off_countdown
+    child_lock, oscillating, led_brightness, delay_off_countdown, angle
       //buzzer,angle,speed_level,led_brightness
     }) {
 
   fanboxa.querySelector('.var-title').textContent = title
   fanboxa.querySelector('.var-speed').textContent = speed_level
-  fanboxa.querySelector('.var-temperature').textContent = "--"
+  fanboxa.querySelector('.var-angle').textContent = angle
 
   // Timer
   let timer_display = '0m'
@@ -339,7 +340,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
     }
   } else {
     activeElement.classList.remove('active')
-    // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
+    // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
   }
   //状态
     activeElement = fanboxa.querySelector('.fanbox')
