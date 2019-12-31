@@ -203,7 +203,7 @@ p{margin:0;padding:0}
 .op-row .op.active button{color:#01be9e!important;text-shadow:0 0 10px #01be9e}
 `+csss+`
 .fanbox{position:relative;margin:10px auto;width:150px;height:150px;border-radius:50%;background:#80808061}
-.fanbox.active.oscillat{animation:oscillate 8s infinite linear}
+.fanbox.active.oscillation{animation:oscillate 8s infinite linear}
 .blades div{position:absolute;margin:15% 0 0 15%;width:35%;height:35%;border-radius:100% 50% 0;background:#989898;transform-origin:100% 100%}
 .blades{width:100%;height:100%}
 .fanbox.active .blades{transform-origin:50% 50%;animation:blades 3s infinite linear;transform-box:fill-box!important}
@@ -332,7 +332,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
   }
   fanboxa.querySelector('.var-timer').textContent = timer_display
 
-  //LED
+  // LED
   let activeElement = fanboxa.querySelector('.c3')
   if (led_brightness < 2) {
     if (activeElement.classList.contains('active') === false) {
@@ -342,7 +342,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
     activeElement.classList.remove('active')
     // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
   }
-  //状态
+  // State
     activeElement = fanboxa.querySelector('.fanbox')
   if (state === 'on') {
     if (activeElement.classList.contains('active') === false) {
@@ -352,7 +352,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
     activeElement.classList.remove('active')
     // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
   }
-  // 童锁
+  // Child Lock
   activeElement = fanboxa.querySelector('.var-lock')
   if (child_lock) {
     if (activeElement.classList.contains('active') === false) {
@@ -361,7 +361,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
   } else {
     activeElement.classList.remove('active')
   }
-  // 自然
+  // Natural
   activeElement = fanboxa.querySelector('.var-natural')
   if (natural_speed) {
     if (activeElement.classList.contains('active') === false) {
@@ -372,19 +372,19 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
     activeElement.classList.remove('active')
     activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
   }
-  // 摆动
+  // Oscillation
   activeElement = fanboxa.querySelector('.var-oscillating')
   let fb = fanboxa.querySelector('.fanbox')
   if (oscillating) {
-    if (fb.classList.contains('oscillat') === false) {
-        fb.classList.add('oscillat')
+    if (fb.classList.contains('oscillation') === false) {
+        fb.classList.add('oscillation')
       }
     if (activeElement.classList.contains('active') === false) {
       // activeElement.classList.add('active')
     }
   } else {
     activeElement.classList.remove('active')
-    fb.classList.remove('oscillat')
+    fb.classList.remove('oscillation')
   }
 }
 /*********************************** UI设置 ************************************/
