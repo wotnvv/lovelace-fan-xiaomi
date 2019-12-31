@@ -273,7 +273,7 @@ to{transform:perspective(10em) rotateY(40deg)}
   <p class="attr-value var-temperature">30</p>
 </div>
 <div class="attr">
-  <p class="attr-title">Timer(s)</p>
+  <p class="attr-title">Timer</p>
   <p class="attr-value var-timer">0</p>
 </div>
 </div>
@@ -313,10 +313,23 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
       //buzzer,angle,speed_level,led_brightness
     }) {
 
-fanboxa.querySelector('.var-title').textContent = title
-fanboxa.querySelector('.var-speed').textContent = speed_level
-fanboxa.querySelector('.var-temperature').textContent = "--"
-fanboxa.querySelector('.var-timer').textContent = delay_off_countdown
+  fanboxa.querySelector('.var-title').textContent = title
+  fanboxa.querySelector('.var-speed').textContent = speed_level
+  fanboxa.querySelector('.var-temperature').textContent = "--"
+
+  // Timer
+  let timer_display = '0m'
+  if(delay_off_countdown) {
+    let total_mins = delay_off_countdown / 60
+    let hours = Math.floor(total_mins / 60)
+    let mins = Math.ceil(total_mins % 60)
+    if(hours) {
+        timer_display = `${hours}h ${mins}m`
+    } else {
+        timer_display = `${mins}m`
+    }
+  }
+  fanboxa.querySelector('.var-timer').textContent = timer_display
 
   //LED
   let activeElement = fanboxa.querySelector('.c3')
