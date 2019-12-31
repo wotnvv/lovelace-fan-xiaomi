@@ -1,7 +1,7 @@
 ﻿/*
  * @Author        : fineemb
  * @Github        : https://github.com/fineemb
- * @Description   : 
+ * @Description   :
  * @Date          : 2019-10-12 02:38:30
  * @LastEditors   : fineemb
  * @LastEditTime  : 2019-10-13 21:16:10
@@ -17,7 +17,7 @@ class FanXiaomi extends HTMLElement {
     const state = hass.states[entityId];
     const ui = this.getUI();
 
-    if(state===undefined){
+    if(state === undefined){
       if (!this.card) {
         const card = document.createElement('ha-card');
         card.className = 'fan-xiaomi';
@@ -25,7 +25,7 @@ class FanXiaomi extends HTMLElement {
         card.classList.add('offline');
         this.card = card;
         this.appendChild(card);
-        ui.querySelector('.var-title').textContent = this.config.name+'(离线)';
+        ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
         return;
       }
     }
@@ -50,8 +50,8 @@ class FanXiaomi extends HTMLElement {
         ui.querySelector('.left').classList.replace('show','hidden')
       }
       ui.querySelector('.left').onclick = () => {
-        this.log('左转5度')
-        if(state==="on"){
+        if(state.state === "on"){
+          this.log('Rotate left 5 degrees')
           hass.callService('fan', 'set_direction', {
             entity_id: entityId,
             direction: "left"
@@ -65,8 +65,8 @@ class FanXiaomi extends HTMLElement {
         ui.querySelector('.right').classList.replace('show','hidden')
       }
       ui.querySelector('.right').onclick = () => {
-        this.log('左转5度')
-        if(state==="on"){
+        if(state.state === "on"){
+          this.log('Rotate right 5 degrees')
           hass.callService('fan', 'set_direction', {
             entity_id: entityId,
             direction: "right"
@@ -76,13 +76,13 @@ class FanXiaomi extends HTMLElement {
       }
       // 定义事件
       ui.querySelector('.c1').onclick = () => {
-        this.log('开关')
+        this.log('Toggle')
         hass.callService('fan', 'toggle', {
           entity_id: entityId
         });
       }
       ui.querySelector('.var-lock').onclick = () => {
-        this.log('童锁')
+        this.log('Child Lock')
         let u = ui.querySelector('.var-lock')
         if (u.classList.contains('active') === false) {
           u.classList.add('active')
@@ -94,39 +94,38 @@ class FanXiaomi extends HTMLElement {
             hass.callService('fan', 'xiaomi_miio_set_child_lock_off', {
                 entity_id: entityId
             });
-        } 
+        }
       }
       ui.querySelector('.var-natural').onclick = () => {
-        //this.log('自然')
+        //this.log('Natural')
         let nowspeed = attrs['direct_speed'];
         let u = ui.querySelector('.var-natural')
         if (u.classList.contains('active') === false) {
-          nowspeed = attrs['direct_speed'];
           u.classList.add('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>自然</button>'
+          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
           hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
               entity_id: entityId
           });
-          hass.callService('fan', 'SET_SPEED', {  
+          hass.callService('fan', 'SET_SPEED', {
             entity_id: entityId,
             speed: nowspeed
           });
         }else{
           u.classList.remove('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>直吹</button>'
+          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
             hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
                 entity_id: entityId
             });
             nowspeed = attrs['natural_speed'];
-            hass.callService('fan', 'SET_SPEED', {  
+            hass.callService('fan', 'SET_SPEED', {
               entity_id: entityId,
               speed: nowspeed
             });
 
-        } 
+        }
       }
       ui.querySelector('.var-oscillating').onclick = () => {
-        this.log('摆头')
+        this.log('Oscillate')
         let u = ui.querySelector('.var-oscillating')
         if (u.classList.contains('active') === false) {
           u.classList.add('active')
@@ -140,7 +139,7 @@ class FanXiaomi extends HTMLElement {
                     entity_id: entityId,
                     oscillating: false
                 });
-            } 
+            }
       }
       ui.querySelector('.var-title').onclick = () => {
         this.log('对话框')
@@ -166,7 +165,7 @@ class FanXiaomi extends HTMLElement {
 
   setConfig(config) {
     if (!config.entity) {
-      throw new Error('你需要定义一个实体');
+      throw new Error('You must specify an entity');
     }
     this.config = config;
   }
@@ -176,7 +175,7 @@ class FanXiaomi extends HTMLElement {
   getCardSize() {
     return 1;
   }
-  
+
 /*********************************** UI设置 ************************************/
 getUI() {
 
@@ -214,7 +213,7 @@ p{margin:0;padding:0}
 .op-row{display:flex;padding:10px;border-top:3px solid #717376!important}
 .op-row .op{width:100%}
 .op-row .op button{outline:0;border:none;background:0 0;cursor:pointer}
-.op-row .op .icon-waper{display:block;margin-bottom:5px;width:30px;height:30px}
+.op-row .op .icon-waper{display:block;margin:0 auto 5px;width:30px;height:30px}
 .op-row .op.active button{color:#01be9e!important;text-shadow:0 0 10px #01be9e}
 `+csss+`
 .fanbox{position:relative;margin:10px auto;width:150px;height:150px;border-radius:50%;background:#80808061}
@@ -281,15 +280,15 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 <div class="attr-row">
 <div class="attr">
-  <p class="attr-title">电量(%)</p>
+  <p class="attr-title">Battery(%)</p>
   <p class="attr-value var-battery">0</p>
 </div>
 <div class="attr">
-  <p class="attr-title">温度(&#8451;)</p>
+  <p class="attr-title">Temp(&#8451;)</p>
   <p class="attr-value var-temperature">30</p>
 </div>
 <div class="attr">
-  <p class="attr-title">湿度(%)</p>
+  <p class="attr-title">Humidity(%)</p>
   <p class="attr-value var-humidity">30</p>
 </div>
 </div>
@@ -299,7 +298,7 @@ to{transform:perspective(10em) rotateY(40deg)}
     <span class="icon-waper">
       <iron-icon icon="mdi:lock"></iron-icon>
     </span>
-      童锁
+      Child Lock
     </button>
 </div>
 <div class="op var-oscillating">
@@ -307,7 +306,7 @@ to{transform:perspective(10em) rotateY(40deg)}
       <span class="icon-waper">
         <iron-icon icon="mdi:fast-forward-30"></iron-icon>
       </span>
-      摆头
+      Oscillate
     </button>
 </div>
 <div class="op var-natural">
@@ -315,7 +314,7 @@ to{transform:perspective(10em) rotateY(40deg)}
       <span class="icon-waper">
         <iron-icon icon="mdi:leaf"></iron-icon>
       </span>
-      自然
+      Natural
     </button>
 </div>
 </div>
@@ -327,7 +326,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 setUI(fanboxa, { title, battery,
      natural_speed,temperature,humidity,
       state,child_lock,oscillating,led_brightness
-      //buzzer,angle,speed_level,led_brightness 
+      //buzzer,angle,speed_level,led_brightness
     }) {
 
 fanboxa.querySelector('.var-title').textContent = title
@@ -368,17 +367,17 @@ fanboxa.querySelector('.var-humidity').textContent = humidity
   if (natural_speed) {
     if (activeElement.classList.contains('active') === false) {
       activeElement.classList.add('active')
-      activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>自然</button>'
+      activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
     }
   } else {
     activeElement.classList.remove('active')
-    activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>直吹</button>'
+    activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
   }
   // 摆动
   activeElement = fanboxa.querySelector('.var-oscillating')
   let fb = fanboxa.querySelector('.fanbox')
   if (oscillating) {
-    
+
     if (fb.classList.contains('oscillat') === false) {
         fb.classList.add('oscillat')
       }
@@ -392,7 +391,7 @@ fanboxa.querySelector('.var-humidity').textContent = humidity
 }
 /*********************************** UI设置 ************************************/
 
-// 加入日志开关
+// 加入日志开关l
 log() {
   // console.log(...arguments)
 }
