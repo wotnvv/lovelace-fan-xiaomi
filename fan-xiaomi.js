@@ -264,8 +264,8 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 <div class="attr-row">
 <div class="attr">
-  <p class="attr-title">Battery(%)</p>
-  <p class="attr-value var-battery">0</p>
+  <p class="attr-title">Speed(%)</p>
+  <p class="attr-value var-speed">0</p>
 </div>
 <div class="attr">
   <p class="attr-title">Temp(&#8451;)</p>
@@ -313,7 +313,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
     }) {
 
 fanboxa.querySelector('.var-title').textContent = title
-fanboxa.querySelector('.var-battery').textContent = speed_level
+fanboxa.querySelector('.var-speed').textContent = speed_level
 fanboxa.querySelector('.var-temperature').textContent = "--"
 fanboxa.querySelector('.var-humidity').textContent = "--"
   //LED
