@@ -192,7 +192,7 @@ p{margin:0;padding:0}
 .title p{margin:0;padding:0;font-weight:700;font-size:18px}
 .title span{font-size:9pt}
 .attr-row{display:flex}
-.attr-row .attr{width:100%}
+.attr-row .attr{width:100%;padding-bottom:2px}
 .attr-row .attr-title{font-size:9pt}
 .attr-row .attr-value{font-size:14px}
 .attr-row .attr:nth-child(2){border-right:1px solid #01be9e;border-left:1px solid #01be9e}
