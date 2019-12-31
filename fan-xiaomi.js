@@ -294,7 +294,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <div class="op var-oscillating">
     <button>
       <span class="icon-waper">
-        <iron-icon icon="mdi:fast-forward-30"></iron-icon>
+        <iron-icon icon="mdi:debug-step-over"></iron-icon>
       </span>
       Oscillate
     </button>
