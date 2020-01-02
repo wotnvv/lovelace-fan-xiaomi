@@ -366,11 +366,9 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
   if (natural_speed) {
     if (activeElement.classList.contains('active') === false) {
       activeElement.classList.add('active')
-      activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
     }
   } else {
     activeElement.classList.remove('active')
-    activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
   }
   // Oscillation
   activeElement = fanboxa.querySelector('.var-oscillating')
