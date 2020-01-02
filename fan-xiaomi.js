@@ -98,17 +98,14 @@ class FanXiaomi extends HTMLElement {
         let u = ui.querySelector('.var-natural')
         if (u.classList.contains('active') === false) {
           u.classList.add('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
           hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
-              entity_id: entityId
+            entity_id: entityId
           });
-        }else{
+        } else {
           u.classList.remove('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
-            hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
-                entity_id: entityId
-            });
-
+          hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
+            entity_id: entityId
+          });
         }
       }
       ui.querySelector('.var-oscillating').onclick = () => {
@@ -120,7 +117,7 @@ class FanXiaomi extends HTMLElement {
                     entity_id: entityId,
                     oscillating: true
                 });
-            }else{
+            } else {
               u.classList.remove('active')
                 hass.callService('fan', 'oscillate', {
                     entity_id: entityId,
