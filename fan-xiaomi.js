@@ -378,7 +378,7 @@ setUI(fanboxa, {title, natural_speed, speed_level, state,
         fb.classList.add('oscillation')
       }
     if (activeElement.classList.contains('active') === false) {
-      // activeElement.classList.add('active')
+      activeElement.classList.add('active')
     }
   } else {
     activeElement.classList.remove('active')
