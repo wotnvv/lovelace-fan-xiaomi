@@ -76,18 +76,34 @@ class FanXiaomi extends HTMLElement {
                     entity_id: entityId
                 });
             }
-            ui.querySelector('.var-lock').onclick = () => {
-                this.log('Child Lock')
-                let u = ui.querySelector('.var-lock')
-                if (u.classList.contains('active') === false) {
-                    u.classList.add('active')
-                    hass.callService('fan', 'xiaomi_miio_set_child_lock_on', {
-                        entity_id: entityId
-                    });
-                }else{
-                    u.classList.remove('active')
-                    hass.callService('fan', 'xiaomi_miio_set_child_lock_off', {
-                        entity_id: entityId
+            ui.querySelector('.var-speed').onclick = () => {
+                this.log('Speed Level')
+                let u = ui.querySelector('.var-speed')
+                let iconSpan = u.querySelector('.icon-waper')
+                let icon = u.querySelector('.icon-waper > iron-icon')
+                if (state.state === 'on') {
+                    let newSpeed
+                    if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
+                        newSpeed = 40
+                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
+                    } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
+                        newSpeed = 60
+                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
+                    } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
+                        newSpeed = 80
+                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
+                    } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
+                        newSpeed = 100
+                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+                    } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
+                        newSpeed = 20
+                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+                    } else {
+                        console.log(icon.getAttribute('icon'))
+                    }
+                    hass.callService('fan', 'set_speed', {
+                        entity_id: entityId,
+                        speed: newSpeed
                     });
                 }
             }
@@ -134,7 +150,7 @@ class FanXiaomi extends HTMLElement {
         this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
             title: myname || attrs['friendly_name'],
             natural_speed: attrs['natural_speed'],
-            speed_level: attrs['direct_speed'],
+            direct_speed: attrs['direct_speed'],
             state: state.state,
             child_lock: attrs['child_lock'],
             oscillating: attrs['oscillating'],
@@ -261,8 +277,8 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 <div class="attr-row">
 <div class="attr">
-<p class="attr-title">Speed(%)</p>
-<p class="attr-value var-speed">0</p>
+<p class="attr-title">Child Lock</p>
+<p class="attr-value var-childlock">0</p>
 </div>
 <div class="attr">
 <p class="attr-title">Angle(&deg;)</p>
@@ -274,12 +290,12 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 </div>
 <div class="op-row">
-<div class="op var-lock">
+<div class="op var-speed">
 <button>
 <span class="icon-waper">
-<iron-icon icon="mdi:lock"></iron-icon>
+<iron-icon icon="mdi:numeric-0-box-outline"></iron-icon>
 </span>
-Child Lock
+Speed Level
 </button>
 </div>
 <div class="op var-oscillating">
@@ -304,12 +320,18 @@ Natural
     }
 
     // 设置UI值
-    setUI(fanboxa, {title, natural_speed, speed_level, state,
+    setUI(fanboxa, {title, natural_speed, direct_speed, state,
         child_lock, oscillating, led_brightness, delay_off_countdown, angle
     }) {
 
         fanboxa.querySelector('.var-title').textContent = title
-        fanboxa.querySelector('.var-speed').textContent = speed_level
+        // Child Lock
+        if (child_lock) {
+            fanboxa.querySelector('.var-childlock').textContent = 'On'
+        } else {
+            fanboxa.querySelector('.var-childlock').textContent = 'Off'
+        }
+
         fanboxa.querySelector('.var-angle').textContent = angle
 
         // Timer
@@ -336,6 +358,7 @@ Natural
             activeElement.classList.remove('active')
             // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
         }
+
         // State
         activeElement = fanboxa.querySelector('.fanbox')
         if (state === 'on') {
@@ -346,15 +369,31 @@ Natural
             activeElement.classList.remove('active')
             // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
         }
-        // Child Lock
-        activeElement = fanboxa.querySelector('.var-lock')
-        if (child_lock) {
+
+        // Speed Level
+        activeElement = fanboxa.querySelector('.var-speed')
+        let iconSpan = activeElement.querySelector('.icon-waper')
+        if (state === 'on') {
             if (activeElement.classList.contains('active') === false) {
                 activeElement.classList.add('active')
             }
         } else {
             activeElement.classList.remove('active')
+            // iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-0-box-outline"></iron-icon>'
         }
+        let direct_speed_int = Number(direct_speed)
+        if (direct_speed_int <= 20) {
+            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+        } else if (direct_speed_int <= 40) {
+            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
+        } else if (direct_speed_int <= 60) {
+            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
+        } else if (direct_speed_int <= 80) {
+            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
+        } else {
+            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+        }
+
         // Natural
         activeElement = fanboxa.querySelector('.var-natural')
         if (natural_speed) {
@@ -364,6 +403,7 @@ Natural
         } else {
             activeElement.classList.remove('active')
         }
+
         // Oscillation
         activeElement = fanboxa.querySelector('.var-oscillating')
         let fb = fanboxa.querySelector('.fanbox')
