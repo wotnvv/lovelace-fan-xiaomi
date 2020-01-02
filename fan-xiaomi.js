@@ -45,7 +45,7 @@ class FanXiaomi extends HTMLElement {
                 ui.querySelector('.left').classList.replace('show','hidden')
             }
             ui.querySelector('.left').onclick = () => {
-                if(state.state === "on"){
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
                     this.log('Rotate left 5 degrees')
                     hass.callService('fan', 'set_direction', {
                         entity_id: entityId,
@@ -60,7 +60,7 @@ class FanXiaomi extends HTMLElement {
                 ui.querySelector('.right').classList.replace('show','hidden')
             }
             ui.querySelector('.right').onclick = () => {
-                if(state.state === "on"){
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
                     this.log('Rotate right 5 degrees')
                     hass.callService('fan', 'set_direction', {
                         entity_id: entityId,
