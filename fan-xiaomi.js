@@ -8,194 +8,175 @@
  */
 
 class FanXiaomi extends HTMLElement {
-  set hass(hass) {
+    set hass(hass) {
+        const entityId = this.config.entity;
+        const style = this.config.style || '';
+        const myname = this.config.name;
+        const state = hass.states[entityId];
+        const ui = this.getUI();
 
-
-    const entityId = this.config.entity;
-    const style = this.config.style || '';
-    const myname = this.config.name;
-    const state = hass.states[entityId];
-    const ui = this.getUI();
-
-    if(state === undefined){
-      if (!this.card) {
-        const card = document.createElement('ha-card');
-        card.className = 'fan-xiaomi';
-        card.appendChild(ui);
-        card.classList.add('offline');
-        this.card = card;
-        this.appendChild(card);
-        ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
-        return;
-      }
-    }
-
-    const attrs = state.attributes;
-    const temperature = attrs['temperature'] || "--";
-    const humidity = attrs['humidity'] || "--";
-
-    if (!this.card) {
-
-      const card = document.createElement('ha-card');
-      card.className = 'fan-xiaomi'
-
-      // 创建UI
-      card.appendChild(ui)
-
-      //调整风扇角度事件绑定
-      ui.querySelector('.left').onmouseover = () => {
-        ui.querySelector('.left').classList.replace('hidden','show')
-      }
-      ui.querySelector('.left').onmouseout = () => {
-        ui.querySelector('.left').classList.replace('show','hidden')
-      }
-      ui.querySelector('.left').onclick = () => {
-        if(state.state === "on"){
-          this.log('Rotate left 5 degrees')
-          hass.callService('fan', 'set_direction', {
-            entity_id: entityId,
-            direction: "left"
-          });
-      }
-      }
-      ui.querySelector('.right').onmouseover = () => {
-        ui.querySelector('.right').classList.replace('hidden','show')
-      }
-      ui.querySelector('.right').onmouseout = () => {
-        ui.querySelector('.right').classList.replace('show','hidden')
-      }
-      ui.querySelector('.right').onclick = () => {
-        if(state.state === "on"){
-          this.log('Rotate right 5 degrees')
-          hass.callService('fan', 'set_direction', {
-            entity_id: entityId,
-            direction: "right"
-          });
+        if(state === undefined){
+            if (!this.card) {
+                const card = document.createElement('ha-card');
+                card.className = 'fan-xiaomi';
+                card.appendChild(ui);
+                card.classList.add('offline');
+                this.card = card;
+                this.appendChild(card);
+                ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
+                return;
+            }
         }
-        return false;
-      }
-      // 定义事件
-      ui.querySelector('.c1').onclick = () => {
-        this.log('Toggle')
-        hass.callService('fan', 'toggle', {
-          entity_id: entityId
-        });
-      }
-      ui.querySelector('.var-lock').onclick = () => {
-        this.log('Child Lock')
-        let u = ui.querySelector('.var-lock')
-        if (u.classList.contains('active') === false) {
-          u.classList.add('active')
-          hass.callService('fan', 'xiaomi_miio_set_child_lock_on', {
-              entity_id: entityId
-          });
-        }else{
-          u.classList.remove('active')
-            hass.callService('fan', 'xiaomi_miio_set_child_lock_off', {
-                entity_id: entityId
-            });
-        }
-      }
-      ui.querySelector('.var-natural').onclick = () => {
-        //this.log('Natural')
-        let nowspeed = attrs['direct_speed'];
-        let u = ui.querySelector('.var-natural')
-        if (u.classList.contains('active') === false) {
-          u.classList.add('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
-          hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
-              entity_id: entityId
-          });
-          hass.callService('fan', 'SET_SPEED', {
-            entity_id: entityId,
-            speed: nowspeed
-          });
-        }else{
-          u.classList.remove('active')
-          u.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
-            hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
-                entity_id: entityId
-            });
-            nowspeed = attrs['natural_speed'];
-            hass.callService('fan', 'SET_SPEED', {
-              entity_id: entityId,
-              speed: nowspeed
-            });
 
-        }
-      }
-      ui.querySelector('.var-oscillating').onclick = () => {
-        this.log('Oscillate')
-        let u = ui.querySelector('.var-oscillating')
-        if (u.classList.contains('active') === false) {
-          u.classList.add('active')
-                hass.callService('fan', 'oscillate', {
-                    entity_id: entityId,
-                    oscillating: true
-                });
-            }else{
-              u.classList.remove('active')
-                hass.callService('fan', 'oscillate', {
-                    entity_id: entityId,
-                    oscillating: false
+        const attrs = state.attributes;
+
+        if (!this.card) {
+            const card = document.createElement('ha-card');
+            card.className = 'fan-xiaomi'
+
+            // 创建UI
+            card.appendChild(ui)
+
+            //调整风扇角度事件绑定
+            ui.querySelector('.left').onmouseover = () => {
+                ui.querySelector('.left').classList.replace('hidden','show')
+            }
+            ui.querySelector('.left').onmouseout = () => {
+                ui.querySelector('.left').classList.replace('show','hidden')
+            }
+            ui.querySelector('.left').onclick = () => {
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    this.log('Rotate left 5 degrees')
+                    hass.callService('fan', 'set_direction', {
+                        entity_id: entityId,
+                        direction: "left"
+                    });
+                }
+            }
+            ui.querySelector('.right').onmouseover = () => {
+                ui.querySelector('.right').classList.replace('hidden','show')
+            }
+            ui.querySelector('.right').onmouseout = () => {
+                ui.querySelector('.right').classList.replace('show','hidden')
+            }
+            ui.querySelector('.right').onclick = () => {
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    this.log('Rotate right 5 degrees')
+                    hass.callService('fan', 'set_direction', {
+                        entity_id: entityId,
+                        direction: "right"
+                    });
+                }
+                return false;
+            }
+            // 定义事件
+            ui.querySelector('.c1').onclick = () => {
+                this.log('Toggle')
+                hass.callService('fan', 'toggle', {
+                    entity_id: entityId
                 });
             }
-      }
-      ui.querySelector('.var-title').onclick = () => {
-        this.log('对话框')
-        card.querySelector('.dialog').style.display = 'block'
-      }
-      this.card = card;
-      this.appendChild(card);
+            ui.querySelector('.var-lock').onclick = () => {
+                this.log('Child Lock')
+                let u = ui.querySelector('.var-lock')
+                if (u.classList.contains('active') === false) {
+                    u.classList.add('active')
+                    hass.callService('fan', 'xiaomi_miio_set_child_lock_on', {
+                        entity_id: entityId
+                    });
+                }else{
+                    u.classList.remove('active')
+                    hass.callService('fan', 'xiaomi_miio_set_child_lock_off', {
+                        entity_id: entityId
+                    });
+                }
+            }
+            ui.querySelector('.var-natural').onclick = () => {
+                //this.log('Natural')
+                let u = ui.querySelector('.var-natural')
+                if (u.classList.contains('active') === false) {
+                    u.classList.add('active')
+                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
+                        entity_id: entityId
+                    });
+                } else {
+                    u.classList.remove('active')
+                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
+                        entity_id: entityId
+                    });
+                }
+            }
+            ui.querySelector('.var-oscillating').onclick = () => {
+                this.log('Oscillate')
+                let u = ui.querySelector('.var-oscillating')
+                if (u.classList.contains('active') === false) {
+                    u.classList.add('active')
+                    hass.callService('fan', 'oscillate', {
+                        entity_id: entityId,
+                        oscillating: true
+                    });
+                } else {
+                    u.classList.remove('active')
+                    hass.callService('fan', 'oscillate', {
+                        entity_id: entityId,
+                        oscillating: false
+                    });
+                }
+            }
+            ui.querySelector('.var-title').onclick = () => {
+                this.log('对话框')
+                card.querySelector('.dialog').style.display = 'block'
+            }
+            this.card = card;
+            this.appendChild(card);
+        }
+        //设置值更新UI
+        this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
+            title: myname || attrs['friendly_name'],
+            natural_speed: attrs['natural_speed'],
+            speed_level: attrs['direct_speed'],
+            state: state.state,
+            child_lock: attrs['child_lock'],
+            oscillating: attrs['oscillating'],
+            led_brightness: attrs['led_brightness'],
+            delay_off_countdown: attrs['delay_off_countdown'],
+            angle: attrs['angle']
+        })
     }
-    //设置值更新UI
-    this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
-      title: myname || attrs['friendly_name'],
-      battery: attrs['battery'] || "--",
-      natural_speed: attrs['natural_speed'],
-      speed_level: attrs['speed_level'],
-      temperature: temperature,
-      humidity: humidity,
-      state: state.state,
-      child_lock: attrs['child_lock'],
-      oscillating: attrs['oscillating'],
-      led_brightness: attrs['led_brightness']
-    })
-  }
 
-  setConfig(config) {
-    if (!config.entity) {
-      throw new Error('You must specify an entity');
+    setConfig(config) {
+        if (!config.entity) {
+            throw new Error('You must specify an entity');
+        }
+        this.config = config;
     }
-    this.config = config;
-  }
 
-  // The height of your card. Home Assistant uses this to automatically
-  // distribute all cards over the available columns.
-  getCardSize() {
-    return 1;
-  }
+    // The height of your card. Home Assistant uses this to automatically
+    // distribute all cards over the available columns.
+    getCardSize() {
+        return 1;
+    }
 
-/*********************************** UI设置 ************************************/
-getUI() {
+    /*********************************** UI设置 ************************************/
+    getUI() {
 
-  let csss='';
-  for(var i=1;i<73;i++){
-    csss+='.ang'+i+` {
-        transform: rotate(`+(i-1)*5+`deg);
-    }`
-  }
-  let fans='';
-  for(var i=1;i<73;i++){
-    fans+=`<div class="fan ang`+i+`"></div>`
-  }
-  let fan1s='';
-  for(var i=1;i<73;i+=2){
-    fan1s+=`<div class="fan1 ang`+i+`"></div>`
-  }
-  let fanbox = document.createElement('div')
-  fanbox.className = 'fan-xiaomi-panel'
-  fanbox.innerHTML = `
+        let csss='';
+        for(var i=1;i<73;i++){
+            csss+='.ang'+i+` {
+                transform: rotate(`+(i-1)*5+`deg);
+            }`
+        }
+        let fans='';
+        for(var i=1;i<73;i++){
+            fans+=`<div class="fan ang`+i+`"></div>`
+        }
+        let fan1s='';
+        for(var i=1;i<73;i+=2){
+            fan1s+=`<div class="fan1 ang`+i+`"></div>`
+        }
+        let fanbox = document.createElement('div')
+        fanbox.className = 'fan-xiaomi-panel'
+        fanbox.innerHTML = `
 <style>
 .fan-xiaomi{position:relative;overflow:hidden;width:100%;height:335px}
 .offline{opacity:0.3}
@@ -206,7 +187,7 @@ p{margin:0;padding:0}
 .title p{margin:0;padding:0;font-weight:700;font-size:18px}
 .title span{font-size:9pt}
 .attr-row{display:flex}
-.attr-row .attr{width:100%}
+.attr-row .attr{width:100%;padding-bottom:2px}
 .attr-row .attr-title{font-size:9pt}
 .attr-row .attr-value{font-size:14px}
 .attr-row .attr:nth-child(2){border-right:1px solid #01be9e;border-left:1px solid #01be9e}
@@ -217,7 +198,7 @@ p{margin:0;padding:0}
 .op-row .op.active button{color:#01be9e!important;text-shadow:0 0 10px #01be9e}
 `+csss+`
 .fanbox{position:relative;margin:10px auto;width:150px;height:150px;border-radius:50%;background:#80808061}
-.fanbox.active.oscillat{animation:oscillate 8s infinite linear}
+.fanbox.active.oscillation{animation:oscillate 8s infinite linear}
 .blades div{position:absolute;margin:15% 0 0 15%;width:35%;height:35%;border-radius:100% 50% 0;background:#989898;transform-origin:100% 100%}
 .blades{width:100%;height:100%}
 .fanbox.active .blades{transform-origin:50% 50%;animation:blades 3s infinite linear;transform-box:fill-box!important}
@@ -254,147 +235,156 @@ to{transform:perspective(10em) rotateY(40deg)}
 <p class="var-title">儿童房</p>
 </div>
 <div class="fanbox">
-  <div class="blades ">
-    <div class="b1 ang1"></div>
-    <div class="b2 ang25"></div>
-    <div class="b3 ang49"></div>
-  </div>
-  `+fans+fan1s+`
-  <div class="c2"></div>
-  <div class="c3">
-    <span class="icon-waper">
-       <iron-icon icon="mdi:power"></iron-icon>
-    </span>
-  </div>
-  <div class="c1"></div>
-  <div class="chevron left hidden">
-    <span class="icon-waper">
-    <iron-icon icon="mdi:chevron-left"></iron-icon>
-  </div>
-  <div class="chevron right hidden">
-    <span class="icon-waper">
-    <iron-icon icon="mdi:chevron-right"></iron-icon>
-  </div>
+<div class="blades ">
+<div class="b1 ang1"></div>
+<div class="b2 ang25"></div>
+<div class="b3 ang49"></div>
+</div>
+`+fans+fan1s+`
+<div class="c2"></div>
+<div class="c3">
+<span class="icon-waper">
+<iron-icon icon="mdi:power"></iron-icon>
+</span>
+</div>
+<div class="c1"></div>
+<div class="chevron left hidden">
+<span class="icon-waper">
+<iron-icon icon="mdi:chevron-left"></iron-icon>
+</div>
+<div class="chevron right hidden">
+<span class="icon-waper">
+<iron-icon icon="mdi:chevron-right"></iron-icon>
+</div>
 </span>
 </div>
 </div>
 <div class="attr-row">
 <div class="attr">
-  <p class="attr-title">Battery(%)</p>
-  <p class="attr-value var-battery">0</p>
+<p class="attr-title">Speed(%)</p>
+<p class="attr-value var-speed">0</p>
 </div>
 <div class="attr">
-  <p class="attr-title">Temp(&#8451;)</p>
-  <p class="attr-value var-temperature">30</p>
+<p class="attr-title">Angle(&deg;)</p>
+<p class="attr-value var-angle">120</p>
 </div>
 <div class="attr">
-  <p class="attr-title">Humidity(%)</p>
-  <p class="attr-value var-humidity">30</p>
+<p class="attr-title">Timer</p>
+<p class="attr-value var-timer">0</p>
 </div>
 </div>
 <div class="op-row">
 <div class="op var-lock">
-    <button>
-    <span class="icon-waper">
-      <iron-icon icon="mdi:lock"></iron-icon>
-    </span>
-      Child Lock
-    </button>
+<button>
+<span class="icon-waper">
+<iron-icon icon="mdi:lock"></iron-icon>
+</span>
+Child Lock
+</button>
 </div>
 <div class="op var-oscillating">
-    <button>
-      <span class="icon-waper">
-        <iron-icon icon="mdi:fast-forward-30"></iron-icon>
-      </span>
-      Oscillate
-    </button>
+<button>
+<span class="icon-waper">
+<iron-icon icon="mdi:debug-step-over"></iron-icon>
+</span>
+Oscillate
+</button>
 </div>
 <div class="op var-natural">
-    <button>
-      <span class="icon-waper">
-        <iron-icon icon="mdi:leaf"></iron-icon>
-      </span>
-      Natural
-    </button>
+<button>
+<span class="icon-waper">
+<iron-icon icon="mdi:leaf"></iron-icon>
+</span>
+Natural
+</button>
 </div>
 </div>
 `
-  return fanbox
-}
+        return fanbox
+    }
 
-// 设置UI值
-setUI(fanboxa, { title, battery,
-     natural_speed,temperature,humidity,
-      state,child_lock,oscillating,led_brightness
-      //buzzer,angle,speed_level,led_brightness
+    // 设置UI值
+    setUI(fanboxa, {title, natural_speed, speed_level, state,
+        child_lock, oscillating, led_brightness, delay_off_countdown, angle
     }) {
 
-fanboxa.querySelector('.var-title').textContent = title
-fanboxa.querySelector('.var-battery').textContent = battery
-fanboxa.querySelector('.var-temperature').textContent = temperature
-fanboxa.querySelector('.var-humidity').textContent = humidity
-  //LED
-  let activeElement = fanboxa.querySelector('.c3')
-  if (led_brightness < 2) {
-    if (activeElement.classList.contains('active') === false) {
-      activeElement.classList.add('active')
-    }
-  } else {
-    activeElement.classList.remove('active')
-    // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
-  }
-  //状态
-    activeElement = fanboxa.querySelector('.fanbox')
-  if (state === 'on') {
-    if (activeElement.classList.contains('active') === false) {
-      activeElement.classList.add('active')
-    }
-  } else {
-    activeElement.classList.remove('active')
-    // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
-  }
-  // 童锁
-  activeElement = fanboxa.querySelector('.var-lock')
-  if (child_lock) {
-    if (activeElement.classList.contains('active') === false) {
-      activeElement.classList.add('active')
-    }
-  } else {
-    activeElement.classList.remove('active')
-  }
-  // 自然
-  activeElement = fanboxa.querySelector('.var-natural')
-  if (natural_speed) {
-    if (activeElement.classList.contains('active') === false) {
-      activeElement.classList.add('active')
-      activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:leaf"></iron-icon></span>Natural</button>'
-    }
-  } else {
-    activeElement.classList.remove('active')
-    activeElement.innerHTML = '<button><span class="icon-waper"><iron-icon icon="mdi:weather-windy"></iron-icon></span>Direct</button>'
-  }
-  // 摆动
-  activeElement = fanboxa.querySelector('.var-oscillating')
-  let fb = fanboxa.querySelector('.fanbox')
-  if (oscillating) {
+        fanboxa.querySelector('.var-title').textContent = title
+        fanboxa.querySelector('.var-speed').textContent = speed_level
+        fanboxa.querySelector('.var-angle').textContent = angle
 
-    if (fb.classList.contains('oscillat') === false) {
-        fb.classList.add('oscillat')
-      }
-    if (activeElement.classList.contains('active') === false) {
-      // activeElement.classList.add('active')
+        // Timer
+        let timer_display = '0m'
+        if(delay_off_countdown) {
+            let total_mins = delay_off_countdown / 60
+            let hours = Math.floor(total_mins / 60)
+            let mins = Math.ceil(total_mins % 60)
+            if(hours) {
+                timer_display = `${hours}h ${mins}m`
+            } else {
+                timer_display = `${mins}m`
+            }
+        }
+        fanboxa.querySelector('.var-timer').textContent = timer_display
+
+        // LED
+        let activeElement = fanboxa.querySelector('.c3')
+        if (led_brightness < 2) {
+            if (activeElement.classList.contains('active') === false) {
+                activeElement.classList.add('active')
+            }
+        } else {
+            activeElement.classList.remove('active')
+            // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
+        }
+        // State
+        activeElement = fanboxa.querySelector('.fanbox')
+        if (state === 'on') {
+            if (activeElement.classList.contains('active') === false) {
+                activeElement.classList.add('active')
+            }
+        } else {
+            activeElement.classList.remove('active')
+            // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
+        }
+        // Child Lock
+        activeElement = fanboxa.querySelector('.var-lock')
+        if (child_lock) {
+            if (activeElement.classList.contains('active') === false) {
+                activeElement.classList.add('active')
+            }
+        } else {
+            activeElement.classList.remove('active')
+        }
+        // Natural
+        activeElement = fanboxa.querySelector('.var-natural')
+        if (natural_speed) {
+            if (activeElement.classList.contains('active') === false) {
+                activeElement.classList.add('active')
+            }
+        } else {
+            activeElement.classList.remove('active')
+        }
+        // Oscillation
+        activeElement = fanboxa.querySelector('.var-oscillating')
+        let fb = fanboxa.querySelector('.fanbox')
+        if (oscillating) {
+            if (fb.classList.contains('oscillation') === false) {
+                fb.classList.add('oscillation')
+            }
+            if (activeElement.classList.contains('active') === false) {
+                activeElement.classList.add('active')
+            }
+        } else {
+            activeElement.classList.remove('active')
+            fb.classList.remove('oscillation')
+        }
     }
-  } else {
-    activeElement.classList.remove('active')
-    fb.classList.remove('oscillat')
-  }
-}
 /*********************************** UI设置 ************************************/
 
-// 加入日志开关l
-log() {
-  // console.log(...arguments)
-}
+    // 加入日志开关l
+    log() {
+        // console.log(...arguments)
+    }
 }
 
 customElements.define('fan-xiaomi', FanXiaomi);
