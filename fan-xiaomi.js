@@ -1,12 +1,3 @@
-/*
- * @Author        : fineemb
- * @Github        : https://github.com/fineemb
- * @Description   :
- * @Date          : 2019-10-12 02:38:30
- * @LastEditors   : fineemb
- * @LastEditTime  : 2019-10-13 21:16:10
- */
-
 class FanXiaomi extends HTMLElement {
     set hass(hass) {
         const entityId = this.config.entity;
