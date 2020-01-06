@@ -20,9 +20,8 @@ resources:
     type: js
 ```
 
-## Examples
-![](dark.gif)
-![](light.gif)
+## Preview
+![](preview.gif)
 
 ## Credits
 [fineemb](https://github.com/fineemb) (Original author)
