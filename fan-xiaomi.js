@@ -69,10 +69,10 @@ class FanXiaomi extends HTMLElement {
             }
             ui.querySelector('.var-speed').onclick = () => {
                 this.log('Speed Level')
-                let u = ui.querySelector('.var-speed')
-                let iconSpan = u.querySelector('.icon-waper')
-                let icon = u.querySelector('.icon-waper > iron-icon')
-                if (state.state === 'on') {
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-speed')
+                    let iconSpan = u.querySelector('.icon-waper')
+                    let icon = u.querySelector('.icon-waper > iron-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
                         newSpeed = 40
@@ -90,7 +90,7 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = 20
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                     } else {
-                        console.log(icon.getAttribute('icon'))
+                        this.log('Error setting fan speed')
                     }
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
