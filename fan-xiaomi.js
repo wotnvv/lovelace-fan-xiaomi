@@ -69,10 +69,10 @@ class FanXiaomi extends HTMLElement {
             }
             ui.querySelector('.var-speed').onclick = () => {
                 this.log('Speed Level')
-                let u = ui.querySelector('.var-speed')
-                let iconSpan = u.querySelector('.icon-waper')
-                let icon = u.querySelector('.icon-waper > iron-icon')
-                if (state.state === 'on') {
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-speed')
+                    let iconSpan = u.querySelector('.icon-waper')
+                    let icon = u.querySelector('.icon-waper > iron-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
                         newSpeed = 40
@@ -90,7 +90,7 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = 20
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                     } else {
-                        console.log(icon.getAttribute('icon'))
+                        this.log('Error setting fan speed')
                     }
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
@@ -100,34 +100,38 @@ class FanXiaomi extends HTMLElement {
             }
             ui.querySelector('.var-natural').onclick = () => {
                 //this.log('Natural')
-                let u = ui.querySelector('.var-natural')
-                if (u.classList.contains('active') === false) {
-                    u.classList.add('active')
-                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
-                        entity_id: entityId
-                    });
-                } else {
-                    u.classList.remove('active')
-                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
-                        entity_id: entityId
-                    });
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-natural')
+                    if (u.classList.contains('active') === false) {
+                        u.classList.add('active')
+                        hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
+                            entity_id: entityId
+                        });
+                    } else {
+                        u.classList.remove('active')
+                        hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
+                            entity_id: entityId
+                        });
+                    }
                 }
             }
             ui.querySelector('.var-oscillating').onclick = () => {
                 this.log('Oscillate')
-                let u = ui.querySelector('.var-oscillating')
-                if (u.classList.contains('active') === false) {
-                    u.classList.add('active')
-                    hass.callService('fan', 'oscillate', {
-                        entity_id: entityId,
-                        oscillating: true
-                    });
-                } else {
-                    u.classList.remove('active')
-                    hass.callService('fan', 'oscillate', {
-                        entity_id: entityId,
-                        oscillating: false
-                    });
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-oscillating')
+                    if (u.classList.contains('active') === false) {
+                        u.classList.add('active')
+                        hass.callService('fan', 'oscillate', {
+                            entity_id: entityId,
+                            oscillating: true
+                        });
+                    } else {
+                        u.classList.remove('active')
+                        hass.callService('fan', 'oscillate', {
+                            entity_id: entityId,
+                            oscillating: false
+                        });
+                    }
                 }
             }
             ui.querySelector('.var-title').onclick = () => {
