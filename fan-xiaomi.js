@@ -100,34 +100,38 @@ class FanXiaomi extends HTMLElement {
             }
             ui.querySelector('.var-natural').onclick = () => {
                 //this.log('Natural')
-                let u = ui.querySelector('.var-natural')
-                if (u.classList.contains('active') === false) {
-                    u.classList.add('active')
-                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
-                        entity_id: entityId
-                    });
-                } else {
-                    u.classList.remove('active')
-                    hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
-                        entity_id: entityId
-                    });
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-natural')
+                    if (u.classList.contains('active') === false) {
+                        u.classList.add('active')
+                        hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
+                            entity_id: entityId
+                        });
+                    } else {
+                        u.classList.remove('active')
+                        hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
+                            entity_id: entityId
+                        });
+                    }
                 }
             }
             ui.querySelector('.var-oscillating').onclick = () => {
                 this.log('Oscillate')
-                let u = ui.querySelector('.var-oscillating')
-                if (u.classList.contains('active') === false) {
-                    u.classList.add('active')
-                    hass.callService('fan', 'oscillate', {
-                        entity_id: entityId,
-                        oscillating: true
-                    });
-                } else {
-                    u.classList.remove('active')
-                    hass.callService('fan', 'oscillate', {
-                        entity_id: entityId,
-                        oscillating: false
-                    });
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-oscillating')
+                    if (u.classList.contains('active') === false) {
+                        u.classList.add('active')
+                        hass.callService('fan', 'oscillate', {
+                            entity_id: entityId,
+                            oscillating: true
+                        });
+                    } else {
+                        u.classList.remove('active')
+                        hass.callService('fan', 'oscillate', {
+                            entity_id: entityId,
+                            oscillating: false
+                        });
+                    }
                 }
             }
             ui.querySelector('.var-title').onclick = () => {
