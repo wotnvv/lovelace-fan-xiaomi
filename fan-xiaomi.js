@@ -58,7 +58,6 @@ class FanXiaomi extends HTMLElement {
                         direction: "right"
                     });
                 }
-                return false;
             }
             // 定义事件
             ui.querySelector('.c1').onclick = () => {
@@ -99,7 +98,7 @@ class FanXiaomi extends HTMLElement {
                 }
             }
             ui.querySelector('.var-natural').onclick = () => {
-                //this.log('Natural')
+                this.log('Natural')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-natural')
                     if (u.classList.contains('active') === false) {
@@ -351,7 +350,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
         }
 
         // State
@@ -362,7 +360,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
         }
 
         // Speed Level
@@ -374,7 +371,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-0-box-outline"></iron-icon>'
         }
         let direct_speed_int = Number(direct_speed)
         if (direct_speed_int <= 20) {
