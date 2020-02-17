@@ -98,6 +98,43 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
+            ui.querySelector('.button-angle').onclick = () => {
+                this.log('Angle Level')
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-angle')
+                    let newAngle
+                    if (u.innerHTML == '30') {
+                        newAngle = 60;
+                    } else if (u.innerHTML == '60') {
+                        newAngle = 90
+                    } else if (u.innerHTML == '90') {
+                        newAngle = 120
+                    } else if (u.innerHTML == '120') {
+                        newAngle = 30
+                    } else {
+                        this.log('Error setting fan angle')
+                    }
+                    u.innerHTML = newAngle
+                    hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
+                        angle: newAngle
+                    });
+                }
+            }
+
+            ui.querySelector('.button-childlock').onclick = () => {
+                this.log('Child lock')
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-childlock')
+                    let newAngle
+                    if (u.innerHTML == 'On') {
+                        hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
+                        u.innerHTML = 'Off'
+                    } else {
+                        hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
+                        u.innerHTML = 'On'
+                    }
+                }
+            }
             ui.querySelector('.var-natural').onclick = () => {
                 //this.log('Natural')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -225,9 +262,11 @@ p{margin:0;padding:0}
 .chevron{position:absolute;top:0;height:100%;opacity:0}
 .show{opacity:1}
 .hidden{opacity:0}
-.chevron.left{left:-30px}
-.chevron.right{right:-30px}
+.chevron.left{left:-30px;cursor:pointer}
+.chevron.right{right:-30px;cursor:pointer}
 .chevron span,.chevron span iron-icon{width:30px;height:100%}
+.button-angle,.button-childlock {cursor:pointer}
+
 
 @keyframes blades{0%{transform:translate(0,0) rotate(0)}
 to{transform:translate(0,0) rotate(3600deg)}
@@ -271,11 +310,11 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 </div>
 <div class="attr-row">
-<div class="attr">
+<div class="attr button-childlock">
 <p class="attr-title">Child Lock</p>
 <p class="attr-value var-childlock">0</p>
 </div>
-<div class="attr">
+<div class="attr button-angle">
 <p class="attr-title">Angle(&deg;)</p>
 <p class="attr-value var-angle">120</p>
 </div>
