@@ -6,29 +6,21 @@ class FanXiaomi extends HTMLElement {
         const state = hass.states[entityId];
         const ui = this.getUI();
 
-        if(state === undefined){
-            if (!this.card) {
-                const card = document.createElement('ha-card');
-                card.className = 'fan-xiaomi';
-                card.appendChild(ui);
+        if (!this.card){
+            const card = document.createElement('ha-card');
+            card.className = 'fan-xiaomi'
+            card.appendChild(ui)
+
+            // Check if fan is disconnected
+            if(state === undefined){
                 card.classList.add('offline');
                 this.card = card;
                 this.appendChild(card);
                 ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
                 return;
             }
-        }
 
-        const attrs = state.attributes;
-
-        if (!this.card) {
-            const card = document.createElement('ha-card');
-            card.className = 'fan-xiaomi'
-
-            // 创建UI
-            card.appendChild(ui)
-
-            //调整风扇角度事件绑定
+            // Angle adjustment event bindings
             ui.querySelector('.left').onmouseover = () => {
                 ui.querySelector('.left').classList.replace('hidden','show')
             }
@@ -58,9 +50,8 @@ class FanXiaomi extends HTMLElement {
                         direction: "right"
                     });
                 }
-                return false;
             }
-            // 定义事件
+            
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
                 hass.callService('fan', 'toggle', {
@@ -99,7 +90,7 @@ class FanXiaomi extends HTMLElement {
                 }
             }
             ui.querySelector('.var-natural').onclick = () => {
-                //this.log('Natural')
+                this.log('Natural')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-natural')
                     if (u.classList.contains('active') === false) {
@@ -141,7 +132,10 @@ class FanXiaomi extends HTMLElement {
             this.card = card;
             this.appendChild(card);
         }
-        //设置值更新UI
+
+        const attrs = state.attributes;
+
+        // Set and update UI parameters
         this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
             title: myname || attrs['friendly_name'],
             natural_speed: attrs['natural_speed'],
@@ -314,11 +308,10 @@ Natural
         return fanbox
     }
 
-    // 设置UI值
+    // Define UI Parameters
     setUI(fanboxa, {title, natural_speed, direct_speed, state,
         child_lock, oscillating, led_brightness, delay_off_countdown, angle
     }) {
-
         fanboxa.querySelector('.var-title').textContent = title
         // Child Lock
         if (child_lock) {
@@ -351,7 +344,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // div.querySelector('.bg-on').removeChild(div.querySelector('.contaifner'))
         }
 
         // State
@@ -362,7 +354,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // div.querySelector('.bg-on').removeChild(div.querySelector('.container'))
         }
 
         // Speed Level
@@ -374,7 +365,6 @@ Natural
             }
         } else {
             activeElement.classList.remove('active')
-            // iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-0-box-outline"></iron-icon>'
         }
         let direct_speed_int = Number(direct_speed)
         if (direct_speed_int <= 20) {
@@ -414,9 +404,9 @@ Natural
             fb.classList.remove('oscillation')
         }
     }
-/*********************************** UI设置 ************************************/
+/*********************************** UI Settings ************************************/
 
-    // 加入日志开关l
+    // Add to logs
     log() {
         // console.log(...arguments)
     }
