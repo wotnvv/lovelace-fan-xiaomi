@@ -22,10 +22,11 @@ class FanXiaomi extends HTMLElement {
         }
 
         const attrs = state.attributes;
-
-        let p5_speed_list = {"Level 1":1,"Level 2":35,"Level 3":70,"Level 4":100}
-        let za4_speed_list = {"Level 1":20,"Level 2":40,"Level 3":60,"Level 4":80, "Level 5":100}
-        let model = attrs['model']
+        const model = attrs['model']
+        
+        const p5_speed_list = {"Level 1":1,"Level 2":35,"Level 3":70,"Level 4":100}
+        const za4_speed_list = {"Level 1":20,"Level 2":40,"Level 3":60,"Level 4":80, "Level 5":100}
+        
         let speed_list
         if (model === 'dmaker.fan.p5') {
             speed_list = p5_speed_list
@@ -120,7 +121,7 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-angle')
                     let newAngle
                     if (u.innerHTML == '30') {
-                        newAngle = 60;
+                        newAngle = 60
                     } else if (u.innerHTML == '60') {
                         newAngle = 90
                     } else if (u.innerHTML == '90') {
@@ -130,9 +131,57 @@ class FanXiaomi extends HTMLElement {
                     } else {
                         this.log('Error setting fan angle')
                     }
-                    u.innerHTML = newAngle
+                    //u.innerHTML = newAngle
                     hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
                         angle: newAngle
+                    });
+                }
+            }
+            
+            ui.querySelector('.button-timer').onclick = () => {
+                this.log('Timer')
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    
+                    let u = ui.querySelector('.var-timer')
+                    
+                    let curTimer
+                    let timeParts = u.textContent.split(/[ ]+/)
+                    //split by space, if two parts - we have hours and minutes
+                    if (timeParts.length > 1) {
+                        curTimer = parseInt(timeParts[0].replace(/\D/g ,'')) * 60
+                            + parseInt(timeParts[1].replace(/\D/g ,''))
+                    }else {
+                        curTimer = parseInt(timeParts[0].replace(/\D/g ,''))
+                    }
+                    
+                    let newTimer
+                    if (curTimer < 60) {
+                        newTimer = 60
+                    } else if (curTimer < 120) {
+                        newTimer = 120
+                    } else if (curTimer < 180) {
+                        newTimer = 180
+                    } else if (curTimer < 240) {
+                        newTimer = 240
+                    } else if (curTimer < 300) {
+                        newTimer = 300
+                    } else if (curTimer < 360) {
+                        newTimer = 360
+                    } else if (curTimer < 420) {
+                        newTimer = 420
+                    } else if (curTimer < 480) {
+                        newTimer = 480
+                    } else {
+                        newTimer = 60
+                    }
+                    
+                    // p5 uses minutes, others use seconds
+                    if (model !== 'dmaker.fan.p5'){
+                        newTime = newTime * 60
+                    }
+                    
+                    hass.callService('fan', 'xiaomi_miio_set_delay_off', {
+                        delay_off_countdown: newTimer
                     });
                 }
             }
@@ -144,10 +193,10 @@ class FanXiaomi extends HTMLElement {
                     let newAngle
                     if (u.innerHTML == 'On') {
                         hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
-                        u.innerHTML = 'Off'
+                        //u.innerHTML = 'Off'
                     } else {
                         hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
-                        u.innerHTML = 'On'
+                        //u.innerHTML = 'On'
                     }
                 }
             }
@@ -286,7 +335,7 @@ p{margin:0;padding:0}
 .chevron.left{left:-30px;cursor:pointer}
 .chevron.right{right:-30px;cursor:pointer}
 .chevron span,.chevron span iron-icon{width:30px;height:100%}
-.button-angle,.button-childlock {cursor:pointer}
+.button-angle,.button-childlock,.button-timer {cursor:pointer}
 
 
 @keyframes blades{0%{transform:translate(0,0) rotate(0)}
@@ -339,7 +388,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <p class="attr-title">Angle(&deg;)</p>
 <p class="attr-value var-angle">120</p>
 </div>
-<div class="attr">
+<div class="attr button-timer">
 <p class="attr-title">Timer</p>
 <p class="attr-value var-timer">0</p>
 </div>
@@ -393,7 +442,11 @@ Natural
         // Timer
         let timer_display = '0m'
         if(delay_off_countdown) {
-            let total_mins = delay_off_countdown / 60
+            let total_mins = delay_off_countdown
+            if (model !== 'dmaker.fan.p5') {
+                total_mins = total_mins / 60
+            }
+            
             let hours = Math.floor(total_mins / 60)
             let mins = Math.ceil(total_mins % 60)
             if(hours) {
