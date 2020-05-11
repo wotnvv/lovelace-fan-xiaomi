@@ -207,6 +207,7 @@ class FanXiaomi extends HTMLElement {
             delay_off_countdown: attrs['delay_off_countdown'],
             angle: attrs['angle'],
             speed: attrs['speed'],
+            mode: attrs['mode'],
             model: attrs['model'],
             speed_list: speed_list
         })
@@ -377,7 +378,7 @@ Natural
   
     setUI(fanboxa, {title, natural_speed, direct_speed, state,
         child_lock, oscillating, led_brightness, delay_off_countdown, angle, 
-        speed, model, speed_list
+        speed, mode, model, speed_list
     }) {
         fanboxa.querySelector('.var-title').textContent = title
         // Child Lock
@@ -435,8 +436,13 @@ Natural
         }
         let direct_speed_int = Number(direct_speed)
         
-        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed
+        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
             direct_speed_int = speed_list[speed]
+            if (mode === 'nature') {
+                natural_speed = true
+            } else if (mode === 'normal') {
+                natural_speed = false
+            }
         }
         
         if (direct_speed_int <= speed_list['Level 1']) {
