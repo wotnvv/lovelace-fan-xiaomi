@@ -194,7 +194,6 @@ class FanXiaomi extends HTMLElement {
             this.card = card;
             this.appendChild(card);
         }
-        const attrs = state.attributes;
 
         // Set and update UI parameters
         this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
