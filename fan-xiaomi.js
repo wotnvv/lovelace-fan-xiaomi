@@ -175,11 +175,6 @@ class FanXiaomi extends HTMLElement {
                         newTimer = 60
                     }
                     
-                    // p5 uses minutes, others use seconds
-                    if (model !== 'dmaker.fan.p5'){
-                        newTime = newTime * 60
-                    }
-                    
                     hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                         delay_off_countdown: newTimer
                     });
