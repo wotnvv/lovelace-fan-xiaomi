@@ -24,7 +24,7 @@ class FanXiaomi extends HTMLElement {
         const attrs = state.attributes;
 
         let p5_speed_list = [1, 35, 70, 100]
-        let za4_speed_list = {"Level 1":20,"Level 2":40,"Level 3":60,"Level 4":80, "Level 5":100}
+        let za4_speed_list = [20, 40, 60, 80, 100]
         let model = attrs['model']
         let speed_list
         if (model === 'dmaker.fan.p5') {
