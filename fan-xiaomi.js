@@ -437,7 +437,7 @@ Natural
         let direct_speed_int = Number(direct_speed)
         
         if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
-            direct_speed_int = speed_list[speed]
+            direct_speed_int = speed_list[int(speed[-1])-1] //speed contains "Level 1" value
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
@@ -447,11 +447,11 @@ Natural
         
         if (direct_speed_int <= speed_list[0]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 2']) {
+        } else if (direct_speed_int <= speed_list[1]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 3']) {
+        } else if (direct_speed_int <= speed_list[2]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 4']) {
+        } else if (direct_speed_int <= speed_list[3]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
         } else {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
