@@ -86,7 +86,7 @@ class FanXiaomi extends HTMLElement {
                     let icon = u.querySelector('.icon-waper > iron-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
-                        newSpeed = speed_list['Level 2']
+                        newSpeed = speed_list[1]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
                         newSpeed = speed_list['Level 3']
