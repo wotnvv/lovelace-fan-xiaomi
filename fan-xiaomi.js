@@ -89,13 +89,13 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = speed_list[1]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
-                        newSpeed = speed_list['Level 3']
+                        newSpeed = speed_list[2]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
-                        newSpeed = speed_list['Level 4']
+                        newSpeed = speed_list[3]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        if speed_list[5] === undefined {
+                        if (speed_list[5] === undefined) {
                             newSpeed = speed_list[0]
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                         } else {
@@ -103,7 +103,7 @@ class FanXiaomi extends HTMLElement {
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
                         }
                     } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
-                        newSpeed = speed_list['Level 1']
+                        newSpeed = speed_list[0]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                     } else {
                         this.log('Error setting fan speed')
@@ -436,8 +436,8 @@ Natural
         }
         let direct_speed_int = Number(direct_speed)
         
-        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
-            direct_speed_int = speed_list[int(speed[-1])-1] //speed contains "Level 1" value
+        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed            
+            direct_speed_int = speed_list[parseInt(speed[speed.length-1])-1] //speed contains "Level 1" value
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
