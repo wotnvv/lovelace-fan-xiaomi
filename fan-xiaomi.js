@@ -445,7 +445,7 @@ Natural
             }
         }
         
-        if (direct_speed_int <= speed_list['Level 1']) {
+        if (direct_speed_int <= speed_list[0]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
         } else if (direct_speed_int <= speed_list['Level 2']) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
