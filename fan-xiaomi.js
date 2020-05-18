@@ -95,11 +95,11 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = speed_list['Level 4']
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        if (model === 'dmaker.fan.p5') { // For p5 last speed is Level 4
-                            newSpeed = speed_list['Level 1']
+                        if speed_list[5] === undefined {
+                            newSpeed = speed_list[0]
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                         } else {
-                            newSpeed = speed_list['Level 5']
+                            newSpeed = speed_list[4]
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
                         }
                     } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
