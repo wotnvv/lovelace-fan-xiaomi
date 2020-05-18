@@ -129,7 +129,8 @@ class FanXiaomi extends HTMLElement {
                     } else if (u.innerHTML == '120') {
                         newAngle = 30
                     } else {
-                        this.log('Error setting fan angle')
+                        newAngle = 30
+                        //this.log('Error setting fan angle')
                     }
                     //u.innerHTML = newAngle
                     hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
