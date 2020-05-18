@@ -332,7 +332,6 @@ p{margin:0;padding:0}
 .chevron span,.chevron span iron-icon{width:30px;height:100%}
 .button-angle,.button-childlock,.button-timer {cursor:pointer}
 
-
 @keyframes blades{0%{transform:translate(0,0) rotate(0)}
 to{transform:translate(0,0) rotate(3600deg)}
 }
