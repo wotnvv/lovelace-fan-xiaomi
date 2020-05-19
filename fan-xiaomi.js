@@ -22,11 +22,10 @@ class FanXiaomi extends HTMLElement {
         }
 
         const attrs = state.attributes;
-        const model = attrs['model']
-        
-        const p5_speed_list = {"Level 1":1,"Level 2":35,"Level 3":70,"Level 4":100}
-        const za4_speed_list = {"Level 1":20,"Level 2":40,"Level 3":60,"Level 4":80, "Level 5":100}
-        
+
+        let p5_speed_list = [1, 35, 70, 100]
+        let za4_speed_list = [20, 40, 60, 80, 100]
+        let model = attrs['model']
         let speed_list
         if (model === 'dmaker.fan.p5') {
             speed_list = p5_speed_list
@@ -87,24 +86,24 @@ class FanXiaomi extends HTMLElement {
                     let icon = u.querySelector('.icon-waper > iron-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
-                        newSpeed = speed_list['Level 2']
+                        newSpeed = speed_list[1]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
-                        newSpeed = speed_list['Level 3']
+                        newSpeed = speed_list[2]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
-                        newSpeed = speed_list['Level 4']
+                        newSpeed = speed_list[3]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        if (model === 'dmaker.fan.p5') { // For p5 last speed is Level 4
-                            newSpeed = speed_list['Level 1']
+                        if (speed_list[5] === undefined) {
+                            newSpeed = speed_list[0]
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                         } else {
-                            newSpeed = speed_list['Level 5']
+                            newSpeed = speed_list[4]
                             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
                         }
                     } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
-                        newSpeed = speed_list['Level 1']
+                        newSpeed = speed_list[0]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                     } else {
                         this.log('Error setting fan speed')
@@ -484,8 +483,8 @@ Natural
         }
         let direct_speed_int = Number(direct_speed)
         
-        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
-            direct_speed_int = speed_list[speed]
+        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed            
+            direct_speed_int = speed_list[parseInt(speed[speed.length-1])-1] //speed contains "Level 1" value
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
@@ -493,13 +492,13 @@ Natural
             }
         }
         
-        if (direct_speed_int <= speed_list['Level 1']) {
+        if (direct_speed_int <= speed_list[0]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 2']) {
+        } else if (direct_speed_int <= speed_list[1]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 3']) {
+        } else if (direct_speed_int <= speed_list[2]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= speed_list['Level 4']) {
+        } else if (direct_speed_int <= speed_list[3]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
         } else {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
