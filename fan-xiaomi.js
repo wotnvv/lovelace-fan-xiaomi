@@ -19,8 +19,29 @@ class FanXiaomi extends HTMLElement {
                 ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
                 return;
             }
+        }
+
+        const attrs = state.attributes;
+
+        let p5_speed_list = [1, 35, 70, 100]
+        let za4_speed_list = [20, 40, 60, 80, 100]
+        let model = attrs['model']
+        let speed_list
+        if (model === 'dmaker.fan.p5') {
+            speed_list = p5_speed_list
+        } else {
+            speed_list = za4_speed_list
+        }
+        
+        if (!this.card) {
+            const card = document.createElement('ha-card');
+            card.className = 'fan-xiaomi'
+
+            // Create UI
+            card.appendChild(ui)
 
             // Angle adjustment event bindings
+          
             ui.querySelector('.left').onmouseover = () => {
                 ui.querySelector('.left').classList.replace('hidden','show')
             }
@@ -51,7 +72,6 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
-            
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
                 hass.callService('fan', 'toggle', {
@@ -66,19 +86,24 @@ class FanXiaomi extends HTMLElement {
                     let icon = u.querySelector('.icon-waper > iron-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
-                        newSpeed = 40
+                        newSpeed = speed_list[1]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
-                        newSpeed = 60
+                        newSpeed = speed_list[2]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
-                        newSpeed = 80
+                        newSpeed = speed_list[3]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        newSpeed = 100
-                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+                        if (speed_list[5] === undefined) {
+                            newSpeed = speed_list[0]
+                            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+                        } else {
+                            newSpeed = speed_list[4]
+                            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+                        }
                     } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
-                        newSpeed = 20
+                        newSpeed = speed_list[0]
                         iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
                     } else {
                         this.log('Error setting fan speed')
@@ -163,14 +188,12 @@ class FanXiaomi extends HTMLElement {
                 }
             }
             ui.querySelector('.var-title').onclick = () => {
-                this.log('对话框')
+                this.log('Dialog box')
                 card.querySelector('.dialog').style.display = 'block'
             }
             this.card = card;
             this.appendChild(card);
         }
-
-        const attrs = state.attributes;
 
         // Set and update UI parameters
         this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
@@ -182,7 +205,11 @@ class FanXiaomi extends HTMLElement {
             oscillating: attrs['oscillating'],
             led_brightness: attrs['led_brightness'],
             delay_off_countdown: attrs['delay_off_countdown'],
-            angle: attrs['angle']
+            angle: attrs['angle'],
+            speed: attrs['speed'],
+            mode: attrs['mode'],
+            model: attrs['model'],
+            speed_list: speed_list
         })
     }
 
@@ -199,7 +226,7 @@ class FanXiaomi extends HTMLElement {
         return 1;
     }
 
-    /*********************************** UI设置 ************************************/
+    /*********************************** UI settings ************************************/
     getUI() {
 
         let csss='';
@@ -276,7 +303,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 
 </style>
 <div class="title">
-<p class="var-title">儿童房</p>
+<p class="var-title">Playground</p>
 </div>
 <div class="fanbox">
 <div class="blades ">
@@ -348,8 +375,10 @@ Natural
     }
 
     // Define UI Parameters
+  
     setUI(fanboxa, {title, natural_speed, direct_speed, state,
-        child_lock, oscillating, led_brightness, delay_off_countdown, angle
+        child_lock, oscillating, led_brightness, delay_off_countdown, angle, 
+        speed, mode, model, speed_list
     }) {
         fanboxa.querySelector('.var-title').textContent = title
         // Child Lock
@@ -406,13 +435,23 @@ Natural
             activeElement.classList.remove('active')
         }
         let direct_speed_int = Number(direct_speed)
-        if (direct_speed_int <= 20) {
+        
+        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed            
+            direct_speed_int = speed_list[parseInt(speed[speed.length-1])-1] //speed contains "Level 1" value
+            if (mode === 'nature') {
+                natural_speed = true
+            } else if (mode === 'normal') {
+                natural_speed = false
+            }
+        }
+        
+        if (direct_speed_int <= speed_list[0]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= 40) {
+        } else if (direct_speed_int <= speed_list[1]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= 60) {
+        } else if (direct_speed_int <= speed_list[2]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
-        } else if (direct_speed_int <= 80) {
+        } else if (direct_speed_int <= speed_list[3]) {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
         } else {
             iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
