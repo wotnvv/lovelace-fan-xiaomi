@@ -441,10 +441,15 @@ Natural
                 total_mins = total_mins / 60
             }
             
+            total_mins += 1
             let hours = Math.floor(total_mins / 60)
-            let mins = Math.ceil(total_mins % 60)
+            let mins = Math.floor(total_mins % 60)
             if(hours) {
-                timer_display = `${hours}h ${mins}m`
+                if(mins) {
+                    timer_display = `${hours}h ${mins}m`
+                } else {
+                    timer_display = `${hours}h`
+                }
             } else {
                 timer_display = `${mins}m`
             }
