@@ -3,16 +3,29 @@
 
 Xiaomi Smartmi Fan Lovelace card for HASS/Home Assistant.
 
-+  Supports [HACS](https://github.com/custom-components/hacs) installation
-+  Works seamlessly with the [syssi/xiaomi_fan](https://github.com/syssi/xiaomi_fan) integration
-+  Animations of the fan are made purely with CSS
+## Features
+- Supports [HACS](https://github.com/custom-components/hacs) installation
+- CSS fan blade and oscillation animation
+
+### Toggles
+- Oscillation
+- Natural mode
+- Child lock
+
+### Cycling
+- Speed level
+- Oscillation angle
+- Timer duration
+
+## Requirements
+- [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) v0.2.0
 
 ## HACS Installation
 Search for `Xiaomi Smartmi Fan Card`
 
 ## Manual Installation
 1. Download `fan-xiaomi.js`
-1. Copy to `www\community\lovelace-fan-xiaomi\fan-xiaomi.js`
+1. Copy to `www/community/lovelace-fan-xiaomi/fan-xiaomi.js`
 1. Add the following to your Lovelace resources
     ``` yaml
     resources:
