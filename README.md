@@ -25,7 +25,7 @@ Search for `Xiaomi Smartmi Fan Card`
 
 ## Manual Installation
 1. Download `fan-xiaomi.js`
-1. Copy to `www\community\lovelace-fan-xiaomi\fan-xiaomi.js`
+1. Copy to `www/community/lovelace-fan-xiaomi/fan-xiaomi.js`
 1. Add the following to your Lovelace resources
     ``` yaml
     resources:
