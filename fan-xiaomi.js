@@ -83,28 +83,28 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
-                    let icon = u.querySelector('.icon-waper > iron-icon')
+                    let icon = u.querySelector('.icon-waper > ha-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
                         newSpeed = speed_list[1]
-                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
+                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
                         newSpeed = speed_list[2]
-                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
+                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
                         newSpeed = speed_list[3]
-                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
+                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
                         if (speed_list[5] === undefined) {
                             newSpeed = speed_list[0]
-                            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+                            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                         } else {
                             newSpeed = speed_list[4]
-                            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+                            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-5-box-outline"></ha-icon>'
                         }
                     } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
                         newSpeed = speed_list[0]
-                        iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                     } else {
                         this.log('Error setting fan speed')
                     }
@@ -323,13 +323,13 @@ p{margin:0;padding:0}
 .c2{top:0;left:0;width:100%;height:100%;border:10px solid #f7f7f7;border-radius:50%}
 .c3{position:absolute;top:40%;left:40%;box-sizing:border-box;width:20%;height:20%;border-radius:50%;background:#fff;color:#ddd}
 .c3.active{border:2px solid #8dd5c3}
-.c3 span iron-icon{width:100%;height:100%}
+.c3 span ha-icon{width:100%;height:100%}
 .chevron{position:absolute;top:0;height:100%;opacity:0}
 .show{opacity:1}
 .hidden{opacity:0}
 .chevron.left{left:-30px;cursor:pointer}
 .chevron.right{right:-30px;cursor:pointer}
-.chevron span,.chevron span iron-icon{width:30px;height:100%}
+.chevron span,.chevron span ha-icon{width:30px;height:100%}
 .button-angle,.button-childlock,.button-timer {cursor:pointer}
 
 @keyframes blades{0%{transform:translate(0,0) rotate(0)}
@@ -358,17 +358,17 @@ to{transform:perspective(10em) rotateY(40deg)}
 <div class="c2"></div>
 <div class="c3">
 <span class="icon-waper">
-<iron-icon icon="mdi:power"></iron-icon>
+<ha-icon icon="mdi:power"></ha-icon>
 </span>
 </div>
 <div class="c1"></div>
 <div class="chevron left hidden">
 <span class="icon-waper">
-<iron-icon icon="mdi:chevron-left"></iron-icon>
+<ha-icon icon="mdi:chevron-left"></ha-icon>
 </div>
 <div class="chevron right hidden">
 <span class="icon-waper">
-<iron-icon icon="mdi:chevron-right"></iron-icon>
+<ha-icon icon="mdi:chevron-right"></ha-icon>
 </div>
 </span>
 </div>
@@ -391,7 +391,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <div class="op var-speed">
 <button>
 <span class="icon-waper">
-<iron-icon icon="mdi:numeric-0-box-outline"></iron-icon>
+<ha-icon icon="mdi:numeric-0-box-outline"></ha-icon>
 </span>
 Speed Level
 </button>
@@ -399,7 +399,7 @@ Speed Level
 <div class="op var-oscillating">
 <button>
 <span class="icon-waper">
-<iron-icon icon="mdi:debug-step-over"></iron-icon>
+<ha-icon icon="mdi:debug-step-over"></ha-icon>
 </span>
 Oscillate
 </button>
@@ -407,7 +407,7 @@ Oscillate
 <div class="op var-natural">
 <button>
 <span class="icon-waper">
-<iron-icon icon="mdi:leaf"></iron-icon>
+<ha-icon icon="mdi:leaf"></ha-icon>
 </span>
 Natural
 </button>
@@ -493,15 +493,15 @@ Natural
         }
         
         if (direct_speed_int <= speed_list[0]) {
-            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-1-box-outline"></iron-icon>'
+            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
         } else if (direct_speed_int <= speed_list[1]) {
-            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-2-box-outline"></iron-icon>'
+            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
         } else if (direct_speed_int <= speed_list[2]) {
-            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-3-box-outline"></iron-icon>'
+            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
         } else if (direct_speed_int <= speed_list[3]) {
-            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-4-box-outline"></iron-icon>'
+            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
         } else {
-            iconSpan.innerHTML = '<iron-icon icon="mdi:numeric-5-box-outline"></iron-icon>'
+            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-5-box-outline"></ha-icon>'
         }
 
         // Natural
