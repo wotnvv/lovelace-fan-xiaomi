@@ -153,21 +153,21 @@ class FanXiaomi extends HTMLElement {
                     curTimer = hours * 60 + mins
 
                     let newTimer
-                    if (curTimer < 60) {
+                    if (curTimer < 59) {
                         newTimer = 60
-                    } else if (curTimer < 120) {
+                    } else if (curTimer < 119) {
                         newTimer = 120
-                    } else if (curTimer < 180) {
+                    } else if (curTimer < 179) {
                         newTimer = 180
-                    } else if (curTimer < 240) {
+                    } else if (curTimer < 239) {
                         newTimer = 240
-                    } else if (curTimer < 300) {
+                    } else if (curTimer < 299) {
                         newTimer = 300
-                    } else if (curTimer < 360) {
+                    } else if (curTimer < 359) {
                         newTimer = 360
-                    } else if (curTimer < 420) {
+                    } else if (curTimer < 419) {
                         newTimer = 420
-                    } else if (curTimer < 480) {
+                    } else if (curTimer < 479) {
                         newTimer = 480
                     } else {
                         newTimer = 60
