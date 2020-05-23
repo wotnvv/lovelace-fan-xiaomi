@@ -74,6 +74,7 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.var-speed').onclick = () => {
                 this.log('Speed Level')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let blades = ui.querySelector('.fanbox .blades')
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
                     let icon = u.querySelector('.icon-waper > ha-icon')
@@ -81,15 +82,19 @@ class FanXiaomi extends HTMLElement {
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
                         newSpeed = 'Level 2'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
+                        blades.className = 'blades level2'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
                         newSpeed = 'Level 3'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
+                        blades.className = 'blades level3'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
                         newSpeed = 'Level 4'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
+                        blades.className = 'blades level4'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
                         newSpeed = 'Level 1'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
+                        blades.className = 'blades level1'
                     } else {
                         this.log('Error setting fan speed')
                     }
@@ -304,7 +309,10 @@ p{margin:0;padding:0}
 .fanbox.active.oscillation{animation:oscillate 8s infinite linear}
 .blades div{position:absolute;margin:15% 0 0 15%;width:35%;height:35%;border-radius:100% 50% 0;background:#989898;transform-origin:100% 100%}
 .blades{width:100%;height:100%}
-.fanbox.active .blades{transform-origin:50% 50%;animation:blades 3s infinite linear;transform-box:fill-box!important}
+.fanbox.active .blades.level1{transform-origin:50% 50%;animation:blades 9s infinite linear;transform-box:fill-box!important}
+.fanbox.active .blades.level2{transform-origin:50% 50%;animation:blades 7s infinite linear;transform-box:fill-box!important}
+.fanbox.active .blades.level3{transform-origin:50% 50%;animation:blades 5s infinite linear;transform-box:fill-box!important}
+.fanbox.active .blades.level4{transform-origin:50% 50%;animation:blades 3s infinite linear;transform-box:fill-box!important}
 .fan{top:0;transform-origin:0 250%}
 .fan,.fan1{position:absolute;left:0;margin-left:50%;width:1%;height:20%;background:#fff}
 .fan1{top:20%;transform-origin:0 150%}
@@ -479,10 +487,12 @@ Natural
         // let direct_speed_int = Number(direct_speed)
         let speedLevel = speed[speed.length - 1]
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
+        activeElement = fanboxa.querySelector('.fanbox .blades')
+        activeElement.className = `blades level${speedLevel}`
 
         // Natural mode
         activeElement = fanboxa.querySelector('.var-natural')
-        
+
          //p5 does not report direct_speed and natural_speed
         if (model === 'dmaker.fan.p5') {
             if (mode === 'nature') {
