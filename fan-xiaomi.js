@@ -16,7 +16,7 @@ class FanXiaomi extends HTMLElement {
                 card.classList.add('offline');
                 this.card = card;
                 this.appendChild(card);
-                ui.querySelector('.var-title').textContent = this.config.name+' (Disconnected)';
+                ui.querySelector('.var-title').textContent = this.config.name + ' (Disconnected)';
                 return;
             }
         }
@@ -32,7 +32,7 @@ class FanXiaomi extends HTMLElement {
         } else {
             speed_list = za4_speed_list
         }
-        
+
         if (!this.card) {
             const card = document.createElement('ha-card');
             card.className = 'fan-xiaomi'
@@ -41,7 +41,6 @@ class FanXiaomi extends HTMLElement {
             card.appendChild(ui)
 
             // Angle adjustment event bindings
-          
             ui.querySelector('.left').onmouseover = () => {
                 ui.querySelector('.left').classList.replace('hidden','show')
             }
@@ -137,13 +136,13 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
-            
+
             ui.querySelector('.button-timer').onclick = () => {
                 this.log('Timer')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    
+
                     let u = ui.querySelector('.var-timer')
-                    
+
                     let curTimer
                     let timeParts = u.textContent.split(/[ ]+/)
                     //split by space, if two parts - we have hours and minutes
@@ -153,7 +152,7 @@ class FanXiaomi extends HTMLElement {
                     }else {
                         curTimer = parseInt(timeParts[0].replace(/\D/g ,''))
                     }
-                    
+
                     let newTimer
                     if (curTimer < 60) {
                         newTimer = 60
@@ -174,7 +173,7 @@ class FanXiaomi extends HTMLElement {
                     } else {
                         newTimer = 60
                     }
-                    
+
                     hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                         delay_off_countdown: newTimer
                     });
@@ -418,9 +417,9 @@ Natural
     }
 
     // Define UI Parameters
-  
+
     setUI(fanboxa, {title, natural_speed, direct_speed, state,
-        child_lock, oscillating, led_brightness, delay_off_countdown, angle, 
+        child_lock, oscillating, led_brightness, delay_off_countdown, angle,
         speed, mode, model, speed_list
     }) {
         fanboxa.querySelector('.var-title').textContent = title
@@ -440,7 +439,7 @@ Natural
             if (model !== 'dmaker.fan.p5') {
                 total_mins = total_mins / 60
             }
-            
+
             total_mins += 1
             let hours = Math.floor(total_mins / 60)
             let mins = Math.floor(total_mins % 60)
@@ -487,8 +486,8 @@ Natural
             activeElement.classList.remove('active')
         }
         let direct_speed_int = Number(direct_speed)
-        
-        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed            
+
+        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
             direct_speed_int = speed_list[parseInt(speed[speed.length-1])-1] //speed contains "Level 1" value
             if (mode === 'nature') {
                 natural_speed = true
@@ -496,7 +495,7 @@ Natural
                 natural_speed = false
             }
         }
-        
+
         if (direct_speed_int <= speed_list[0]) {
             iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
         } else if (direct_speed_int <= speed_list[1]) {
