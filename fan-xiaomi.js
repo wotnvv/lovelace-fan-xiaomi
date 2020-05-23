@@ -479,20 +479,20 @@ Natural
             activeElement.classList.remove('active')
         }
         // let direct_speed_int = Number(direct_speed)
+        let speedLevel = speed[speed.length - 1]
+        iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
 
-        if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
+        // Natural mode
+        activeElement = fanboxa.querySelector('.var-natural')
+        
+         //p5 does not report direct_speed and natural_speed
+        if (model === 'dmaker.fan.p5') {
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
                 natural_speed = false
             }
         }
-
-        let speedLevel = speed[speed.length - 1]
-        iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
-
-        // Natural mode
-        activeElement = fanboxa.querySelector('.var-natural')
         if (natural_speed) {
             if (activeElement.classList.contains('active') === false) {
                 activeElement.classList.add('active')
