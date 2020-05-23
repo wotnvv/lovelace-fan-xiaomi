@@ -136,36 +136,52 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-timer')
 
-                    let curTimer
+                    let currTimer
                     let hoursRegex = /(\d)h/g
                     let minsRegex = /(\d{1,2})m/g
                     let hoursMatch = hoursRegex.exec(u.textContent)
                     let minsMatch = minsRegex.exec(u.textContent)
-                    let hours = parseInt(hoursMatch ? hoursMatch[1] : '0')
-                    let mins = parseInt(minsMatch ? minsMatch[1] : '0')
-                    curTimer = hours * 60 + mins
+                    let currHours = parseInt(hoursMatch ? hoursMatch[1] : '0')
+                    let currMins = parseInt(minsMatch ? minsMatch[1] : '0')
+                    currTimer = currHours * 60 + currMins
 
                     let newTimer
-                    if (curTimer < 59) {
+                    if (currTimer < 59) {
                         newTimer = 60
-                    } else if (curTimer < 119) {
+                    } else if (currTimer < 119) {
                         newTimer = 120
-                    } else if (curTimer < 179) {
+                    } else if (currTimer < 179) {
                         newTimer = 180
-                    } else if (curTimer < 239) {
+                    } else if (currTimer < 239) {
                         newTimer = 240
-                    } else if (curTimer < 299) {
+                    } else if (currTimer < 299) {
                         newTimer = 300
-                    } else if (curTimer < 359) {
+                    } else if (currTimer < 359) {
                         newTimer = 360
-                    } else if (curTimer < 419) {
+                    } else if (currTimer < 419) {
                         newTimer = 420
-                    } else if (curTimer < 479) {
+                    } else if (currTimer < 479) {
                         newTimer = 480
                     } else {
                         newTimer = 60
                     }
 
+                    // Update timer display
+                    let hours = Math.floor(newTimer / 60)
+                    let mins = Math.floor(newTimer % 60)
+                    let timer_display
+                    if(hours) {
+                        if(mins) {
+                            timer_display = `${hours}h ${mins}m`
+                        } else {
+                            timer_display = `${hours}h`
+                        }
+                    } else {
+                        timer_display = `${mins}m`
+                    }
+                    u.textContent = timer_display
+                    b.classList.add('loading')
+                    
                     hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                         delay_off_countdown: newTimer
                     });
