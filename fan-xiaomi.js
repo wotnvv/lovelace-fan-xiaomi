@@ -62,7 +62,7 @@ class FanXiaomi extends HTMLElement {
                 }
             }
             
-            // State toggle event bindings
+            // Power toggle event bindings
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
                 hass.callService('fan', 'toggle', {
@@ -109,24 +109,29 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-angle').onclick = () => {
                 this.log('Angle Level')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-angle')
-                    let newAngle
-                    if (u.innerHTML == '30') {
-                        newAngle = 60
-                    } else if (u.innerHTML == '60') {
-                        newAngle = 90
-                    } else if (u.innerHTML == '90') {
-                        newAngle = 120
-                    } else if (u.innerHTML == '120') {
-                        newAngle = 30
-                    } else {
-                        newAngle = 30
-                        //this.log('Error setting fan angle')
+                    let b = ui.querySelector('.button-angle')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-angle')
+                        let newAngle
+                        if (u.innerHTML == '30') {
+                            newAngle = 60
+                        } else if (u.innerHTML == '60') {
+                            newAngle = 90
+                        } else if (u.innerHTML == '90') {
+                            newAngle = 120
+                        } else if (u.innerHTML == '120') {
+                            newAngle = 30
+                        } else {
+                            newAngle = 30
+                            //this.log('Error setting fan angle')
+                        }
+                        u.innerHTML = newAngle
+                        b.classList.add('loading')
+                        
+                        hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
+                            angle: newAngle
+                        });
                     }
-                    //u.innerHTML = newAngle
-                    hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
-                        angle: newAngle
-                    });
                 }
             }
 
@@ -134,41 +139,60 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-timer').onclick = () => {
                 this.log('Timer')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-timer')
+                    let b = ui.querySelector('.button-timer')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-timer')
 
-                    let curTimer
-                    let hoursRegex = /(\d)h/g
-                    let minsRegex = /(\d{1,2})m/g
-                    let hoursMatch = hoursRegex.exec(u.textContent)
-                    let minsMatch = minsRegex.exec(u.textContent)
-                    let hours = parseInt(hoursMatch ? hoursMatch[1] : '0')
-                    let mins = parseInt(minsMatch ? minsMatch[1] : '0')
-                    curTimer = hours * 60 + mins
+                        let currTimer
+                        let hoursRegex = /(\d)h/g
+                        let minsRegex = /(\d{1,2})m/g
+                        let hoursMatch = hoursRegex.exec(u.textContent)
+                        let minsMatch = minsRegex.exec(u.textContent)
+                        let currHours = parseInt(hoursMatch ? hoursMatch[1] : '0')
+                        let currMins = parseInt(minsMatch ? minsMatch[1] : '0')
+                        currTimer = currHours * 60 + currMins
 
-                    let newTimer
-                    if (curTimer < 59) {
-                        newTimer = 60
-                    } else if (curTimer < 119) {
-                        newTimer = 120
-                    } else if (curTimer < 179) {
-                        newTimer = 180
-                    } else if (curTimer < 239) {
-                        newTimer = 240
-                    } else if (curTimer < 299) {
-                        newTimer = 300
-                    } else if (curTimer < 359) {
-                        newTimer = 360
-                    } else if (curTimer < 419) {
-                        newTimer = 420
-                    } else if (curTimer < 479) {
-                        newTimer = 480
-                    } else {
-                        newTimer = 60
+                        let newTimer
+                        if (currTimer < 59) {
+                            newTimer = 60
+                        } else if (currTimer < 119) {
+                            newTimer = 120
+                        } else if (currTimer < 179) {
+                            newTimer = 180
+                        } else if (currTimer < 239) {
+                            newTimer = 240
+                        } else if (currTimer < 299) {
+                            newTimer = 300
+                        } else if (currTimer < 359) {
+                            newTimer = 360
+                        } else if (currTimer < 419) {
+                            newTimer = 420
+                        } else if (currTimer < 479) {
+                            newTimer = 480
+                        } else {
+                            newTimer = 60
+                        }
+
+                        // Update timer display
+                        let hours = Math.floor(newTimer / 60)
+                        let mins = Math.floor(newTimer % 60)
+                        let timer_display
+                        if(hours) {
+                            if(mins) {
+                                timer_display = `${hours}h ${mins}m`
+                            } else {
+                                timer_display = `${hours}h`
+                            }
+                        } else {
+                            timer_display = `${mins}m`
+                        }
+                        u.textContent = timer_display
+                        b.classList.add('loading')
+                        
+                        hass.callService('fan', 'xiaomi_miio_set_delay_off', {
+                            delay_off_countdown: newTimer
+                        });
                     }
-
-                    hass.callService('fan', 'xiaomi_miio_set_delay_off', {
-                        delay_off_countdown: newTimer
-                    });
                 }
             }
 
@@ -176,14 +200,18 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-childlock').onclick = () => {
                 this.log('Child lock')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-childlock')
-                    let newAngle
-                    if (u.innerHTML == 'On') {
-                        hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
-                        //u.innerHTML = 'Off'
-                    } else {
-                        hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
-                        //u.innerHTML = 'On'
+                    let b = ui.querySelector('.button-childlock')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-childlock')
+                        let newAngle
+                        if (u.innerHTML == 'On') {
+                            hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
+                            u.innerHTML = 'Off'
+                        } else {
+                            hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
+                            u.innerHTML = 'On'
+                        }
+                        b.classList.add('loading')
                     }
                 }
             }
@@ -288,6 +316,7 @@ class FanXiaomi extends HTMLElement {
 <style>
 .fan-xiaomi{position:relative;overflow:hidden;width:100%;height:335px}
 .offline{opacity:0.3}
+.loading{opacity:0.6}
 .icon{overflow:hidden;width:2em;height:2em;vertical-align:-.15em;fill:gray}
 .fan-xiaomi-panel{position:absolute;top:0;width:100%;text-align:center}
 p{margin:0;padding:0}
@@ -423,6 +452,7 @@ Natural
         speed, mode, model
     }) {
         fanboxa.querySelector('.var-title').textContent = title
+        
         // Child Lock
         if (child_lock) {
             fanboxa.querySelector('.var-childlock').textContent = 'On'
@@ -431,6 +461,7 @@ Natural
         }
 
         fanboxa.querySelector('.var-angle').textContent = angle
+        fanboxa.querySelector('.button-angle').classList.remove('loading')
 
         // Timer
         let timer_display = 'Off'
@@ -453,6 +484,7 @@ Natural
             }
         }
         fanboxa.querySelector('.var-timer').textContent = timer_display
+        fanboxa.querySelector('.button-timer').classList.remove('loading')
 
         // LED
         let activeElement = fanboxa.querySelector('.c3')
