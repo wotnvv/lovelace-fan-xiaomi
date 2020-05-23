@@ -459,9 +459,12 @@ Natural
         } else {
             fanboxa.querySelector('.var-childlock').textContent = 'Off'
         }
+        fanboxa.querySelector('.button-childlock').classList.remove('loading')
 
+        // Angle
         fanboxa.querySelector('.var-angle').textContent = angle
         fanboxa.querySelector('.button-angle').classList.remove('loading')
+        
 
         // Timer
         let timer_display = 'Off'
