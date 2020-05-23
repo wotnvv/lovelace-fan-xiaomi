@@ -109,24 +109,29 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-angle').onclick = () => {
                 this.log('Angle Level')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-angle')
-                    let newAngle
-                    if (u.innerHTML == '30') {
-                        newAngle = 60
-                    } else if (u.innerHTML == '60') {
-                        newAngle = 90
-                    } else if (u.innerHTML == '90') {
-                        newAngle = 120
-                    } else if (u.innerHTML == '120') {
-                        newAngle = 30
-                    } else {
-                        newAngle = 30
-                        //this.log('Error setting fan angle')
+                    let b = ui.querySelector('.button-angle')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-angle')
+                        let newAngle
+                        if (u.innerHTML == '30') {
+                            newAngle = 60
+                        } else if (u.innerHTML == '60') {
+                            newAngle = 90
+                        } else if (u.innerHTML == '90') {
+                            newAngle = 120
+                        } else if (u.innerHTML == '120') {
+                            newAngle = 30
+                        } else {
+                            newAngle = 30
+                            //this.log('Error setting fan angle')
+                        }
+                        u.innerHTML = newAngle
+                        b.classList.add('loading')
+                        
+                        hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
+                            angle: newAngle
+                        });
                     }
-                    u.innerHTML = newAngle
-                    hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
-                        angle: newAngle
-                    });
                 }
             }
 
@@ -456,7 +461,7 @@ Natural
         }
 
         fanboxa.querySelector('.var-angle').textContent = angle
-        fanboxa.querySelector('.button-childlock').classList.remove('loading')
+        fanboxa.querySelector('.button-angle').classList.remove('loading')
 
         // Timer
         let timer_display = 'Off'
