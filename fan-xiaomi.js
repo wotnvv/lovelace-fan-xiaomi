@@ -329,7 +329,8 @@ p{margin:0;padding:0}
 .hidden{opacity:0}
 .chevron.left{left:-30px;cursor:pointer}
 .chevron.right{right:-30px;cursor:pointer}
-.chevron span,.chevron span ha-icon{width:30px;height:100%}
+.chevron span ha-icon{width:30px;height:100%}
+.chevron span ha-icon{width:30px;height:100%;display:flex;align-items:center;justify-content:center}
 .button-angle,.button-childlock,.button-timer {cursor:pointer}
 
 @keyframes blades{0%{transform:translate(0,0) rotate(0)}
