@@ -23,16 +23,6 @@ class FanXiaomi extends HTMLElement {
 
         const attrs = state.attributes;
 
-        let p5_speed_list = [1, 35, 70, 100]
-        let za4_speed_list = [20, 40, 60, 80, 100]
-        let model = attrs['model']
-        let speed_list
-        if (model === 'dmaker.fan.p5') {
-            speed_list = p5_speed_list
-        } else {
-            speed_list = za4_speed_list
-        }
-
         if (!this.card) {
             const card = document.createElement('ha-card');
             card.className = 'fan-xiaomi'
@@ -89,24 +79,16 @@ class FanXiaomi extends HTMLElement {
                     let icon = u.querySelector('.icon-waper > ha-icon')
                     let newSpeed
                     if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
-                        newSpeed = speed_list[1]
+                        newSpeed = 'Level 2'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
-                        newSpeed = speed_list[2]
+                        newSpeed = 'Level 3'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
-                        newSpeed = speed_list[3]
+                        newSpeed = 'Level 4'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        if (speed_list[4] === undefined) {
-                            newSpeed = speed_list[0]
-                            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
-                        } else {
-                            newSpeed = speed_list[4]
-                            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-5-box-outline"></ha-icon>'
-                        }
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-5-box-outline") {
-                        newSpeed = speed_list[0]
+                        newSpeed = 'Level 1'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                     } else {
                         this.log('Error setting fan speed')
@@ -263,7 +245,6 @@ class FanXiaomi extends HTMLElement {
             speed: attrs['speed'],
             mode: attrs['mode'],
             model: attrs['model'],
-            speed_list: speed_list
         })
     }
 
@@ -432,7 +413,7 @@ Natural
 
     setUI(fanboxa, {title, natural_speed, direct_speed, state,
         child_lock, oscillating, led_brightness, delay_off_countdown, angle,
-        speed, mode, model, speed_list
+        speed, mode, model
     }) {
         fanboxa.querySelector('.var-title').textContent = title
         // Child Lock
@@ -497,10 +478,9 @@ Natural
         } else {
             activeElement.classList.remove('active')
         }
-        let direct_speed_int = Number(direct_speed)
+        // let direct_speed_int = Number(direct_speed)
 
         if (model === 'dmaker.fan.p5') { //p5 does not report direct_speed and natural_speed
-            direct_speed_int = speed_list[parseInt(speed[speed.length-1])-1] //speed contains "Level 1" value
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
@@ -508,17 +488,8 @@ Natural
             }
         }
 
-        if (direct_speed_int <= speed_list[0]) {
-            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
-        } else if (direct_speed_int <= speed_list[1]) {
-            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
-        } else if (direct_speed_int <= speed_list[2]) {
-            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
-        } else if (direct_speed_int <= speed_list[3]) {
-            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
-        } else {
-            iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-5-box-outline"></ha-icon>'
-        }
+        let speedLevel = speed[speed.length - 1]
+        iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
 
         // Natural mode
         activeElement = fanboxa.querySelector('.var-natural')
