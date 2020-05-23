@@ -383,7 +383,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 <div class="attr button-timer">
 <p class="attr-title">Timer</p>
-<p class="attr-value var-timer">0</p>
+<p class="attr-value var-timer">Off</p>
 </div>
 </div>
 <div class="op-row">
@@ -433,7 +433,7 @@ Natural
         fanboxa.querySelector('.var-angle').textContent = angle
 
         // Timer
-        let timer_display = '0m'
+        let timer_display = 'Off'
         if(delay_off_countdown) {
             let total_mins = delay_off_countdown
             if (model !== 'dmaker.fan.p5') {
@@ -465,7 +465,7 @@ Natural
             activeElement.classList.remove('active')
         }
 
-        // State
+        // Power
         activeElement = fanboxa.querySelector('.fanbox')
         if (state === 'on') {
             if (activeElement.classList.contains('active') === false) {
