@@ -62,7 +62,7 @@ class FanXiaomi extends HTMLElement {
                 }
             }
             
-            // State toggle event bindings
+            // Power toggle event bindings
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
                 hass.callService('fan', 'toggle', {
@@ -195,14 +195,18 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-childlock').onclick = () => {
                 this.log('Child lock')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-childlock')
-                    let newAngle
-                    if (u.innerHTML == 'On') {
-                        hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
-                        u.innerHTML = 'Off'
-                    } else {
-                        hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
-                        u.innerHTML = 'On'
+                    let b = ui.querySelector('.button-childlock')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-childlock')
+                        let newAngle
+                        if (u.innerHTML == 'On') {
+                            hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
+                            u.innerHTML = 'Off'
+                        } else {
+                            hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
+                            u.innerHTML = 'On'
+                        }
+                        b.classList.add('loading')
                     }
                 }
             }
@@ -443,6 +447,7 @@ Natural
         speed, mode, model
     }) {
         fanboxa.querySelector('.var-title').textContent = title
+        
         // Child Lock
         if (child_lock) {
             fanboxa.querySelector('.var-childlock').textContent = 'On'
@@ -451,6 +456,7 @@ Natural
         }
 
         fanboxa.querySelector('.var-angle').textContent = angle
+        fanboxa.querySelector('.button-childlock').classList.remove('loading')
 
         // Timer
         let timer_display = 'Off'
