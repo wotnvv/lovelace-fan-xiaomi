@@ -134,57 +134,60 @@ class FanXiaomi extends HTMLElement {
             ui.querySelector('.button-timer').onclick = () => {
                 this.log('Timer')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-                    let u = ui.querySelector('.var-timer')
+                    let b = ui.querySelector('.button-timer')
+                    if (!b.classList.contains('loading')) {
+                        let u = ui.querySelector('.var-timer')
 
-                    let currTimer
-                    let hoursRegex = /(\d)h/g
-                    let minsRegex = /(\d{1,2})m/g
-                    let hoursMatch = hoursRegex.exec(u.textContent)
-                    let minsMatch = minsRegex.exec(u.textContent)
-                    let currHours = parseInt(hoursMatch ? hoursMatch[1] : '0')
-                    let currMins = parseInt(minsMatch ? minsMatch[1] : '0')
-                    currTimer = currHours * 60 + currMins
+                        let currTimer
+                        let hoursRegex = /(\d)h/g
+                        let minsRegex = /(\d{1,2})m/g
+                        let hoursMatch = hoursRegex.exec(u.textContent)
+                        let minsMatch = minsRegex.exec(u.textContent)
+                        let currHours = parseInt(hoursMatch ? hoursMatch[1] : '0')
+                        let currMins = parseInt(minsMatch ? minsMatch[1] : '0')
+                        currTimer = currHours * 60 + currMins
 
-                    let newTimer
-                    if (currTimer < 59) {
-                        newTimer = 60
-                    } else if (currTimer < 119) {
-                        newTimer = 120
-                    } else if (currTimer < 179) {
-                        newTimer = 180
-                    } else if (currTimer < 239) {
-                        newTimer = 240
-                    } else if (currTimer < 299) {
-                        newTimer = 300
-                    } else if (currTimer < 359) {
-                        newTimer = 360
-                    } else if (currTimer < 419) {
-                        newTimer = 420
-                    } else if (currTimer < 479) {
-                        newTimer = 480
-                    } else {
-                        newTimer = 60
-                    }
-
-                    // Update timer display
-                    let hours = Math.floor(newTimer / 60)
-                    let mins = Math.floor(newTimer % 60)
-                    let timer_display
-                    if(hours) {
-                        if(mins) {
-                            timer_display = `${hours}h ${mins}m`
+                        let newTimer
+                        if (currTimer < 59) {
+                            newTimer = 60
+                        } else if (currTimer < 119) {
+                            newTimer = 120
+                        } else if (currTimer < 179) {
+                            newTimer = 180
+                        } else if (currTimer < 239) {
+                            newTimer = 240
+                        } else if (currTimer < 299) {
+                            newTimer = 300
+                        } else if (currTimer < 359) {
+                            newTimer = 360
+                        } else if (currTimer < 419) {
+                            newTimer = 420
+                        } else if (currTimer < 479) {
+                            newTimer = 480
                         } else {
-                            timer_display = `${hours}h`
+                            newTimer = 60
                         }
-                    } else {
-                        timer_display = `${mins}m`
+
+                        // Update timer display
+                        let hours = Math.floor(newTimer / 60)
+                        let mins = Math.floor(newTimer % 60)
+                        let timer_display
+                        if(hours) {
+                            if(mins) {
+                                timer_display = `${hours}h ${mins}m`
+                            } else {
+                                timer_display = `${hours}h`
+                            }
+                        } else {
+                            timer_display = `${mins}m`
+                        }
+                        u.textContent = timer_display
+                        b.classList.add('loading')
+                        
+                        hass.callService('fan', 'xiaomi_miio_set_delay_off', {
+                            delay_off_countdown: newTimer
+                        });
                     }
-                    u.textContent = timer_display
-                    b.classList.add('loading')
-                    
-                    hass.callService('fan', 'xiaomi_miio_set_delay_off', {
-                        delay_off_countdown: newTimer
-                    });
                 }
             }
 
@@ -304,6 +307,7 @@ class FanXiaomi extends HTMLElement {
 <style>
 .fan-xiaomi{position:relative;overflow:hidden;width:100%;height:335px}
 .offline{opacity:0.3}
+.loading{opacity:0.6}
 .icon{overflow:hidden;width:2em;height:2em;vertical-align:-.15em;fill:gray}
 .fan-xiaomi-panel{position:absolute;top:0;width:100%;text-align:center}
 p{margin:0;padding:0}
@@ -469,6 +473,7 @@ Natural
             }
         }
         fanboxa.querySelector('.var-timer').textContent = timer_display
+        fanboxa.querySelector('.button-timer').classList.remove('loading')
 
         // LED
         let activeElement = fanboxa.querySelector('.c3')
