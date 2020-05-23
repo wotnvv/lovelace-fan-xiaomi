@@ -144,14 +144,13 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-timer')
 
                     let curTimer
-                    let timeParts = u.textContent.split(/[ ]+/)
-                    //split by space, if two parts - we have hours and minutes
-                    if (timeParts.length > 1) {
-                        curTimer = parseInt(timeParts[0].replace(/\D/g ,'')) * 60
-                            + parseInt(timeParts[1].replace(/\D/g ,''))
-                    }else {
-                        curTimer = parseInt(timeParts[0].replace(/\D/g ,''))
-                    }
+                    let hoursRegex = /(\d)h/g
+                    let minsRegex = /(\d{1,2})m/g
+                    let hoursMatch = hoursRegex.exec(u.textContent)
+                    let minsMatch = minsRegex.exec(u.textContent)
+                    let hours = parseInt(hoursMatch ? hoursMatch[1] : '0')
+                    let mins = parseInt(minsMatch ? minsMatch[1] : '0')
+                    curTimer = hours * 60 + mins
 
                     let newTimer
                     if (curTimer < 60) {
