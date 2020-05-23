@@ -95,7 +95,7 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = speed_list[3]
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
                     } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
-                        if (speed_list[5] === undefined) {
+                        if (speed_list[4] === undefined) {
                             newSpeed = speed_list[0]
                             iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                         } else {
