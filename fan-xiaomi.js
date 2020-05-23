@@ -123,7 +123,7 @@ class FanXiaomi extends HTMLElement {
                         newAngle = 30
                         //this.log('Error setting fan angle')
                     }
-                    //u.innerHTML = newAngle
+                    u.innerHTML = newAngle
                     hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
                         angle: newAngle
                     });
@@ -196,10 +196,10 @@ class FanXiaomi extends HTMLElement {
                     let newAngle
                     if (u.innerHTML == 'On') {
                         hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
-                        //u.innerHTML = 'Off'
+                        u.innerHTML = 'Off'
                     } else {
                         hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
-                        //u.innerHTML = 'On'
+                        u.innerHTML = 'On'
                     }
                 }
             }
