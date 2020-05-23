@@ -144,31 +144,30 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-timer')
 
                     let curTimer
-                    let timeParts = u.textContent.split(/[ ]+/)
-                    //split by space, if two parts - we have hours and minutes
-                    if (timeParts.length > 1) {
-                        curTimer = parseInt(timeParts[0].replace(/\D/g ,'')) * 60
-                            + parseInt(timeParts[1].replace(/\D/g ,''))
-                    }else {
-                        curTimer = parseInt(timeParts[0].replace(/\D/g ,''))
-                    }
+                    let hoursRegex = /(\d)h/g
+                    let minsRegex = /(\d{1,2})m/g
+                    let hoursMatch = hoursRegex.exec(u.textContent)
+                    let minsMatch = minsRegex.exec(u.textContent)
+                    let hours = parseInt(hoursMatch ? hoursMatch[1] : '0')
+                    let mins = parseInt(minsMatch ? minsMatch[1] : '0')
+                    curTimer = hours * 60 + mins
 
                     let newTimer
-                    if (curTimer < 60) {
+                    if (curTimer < 59) {
                         newTimer = 60
-                    } else if (curTimer < 120) {
+                    } else if (curTimer < 119) {
                         newTimer = 120
-                    } else if (curTimer < 180) {
+                    } else if (curTimer < 179) {
                         newTimer = 180
-                    } else if (curTimer < 240) {
+                    } else if (curTimer < 239) {
                         newTimer = 240
-                    } else if (curTimer < 300) {
+                    } else if (curTimer < 299) {
                         newTimer = 300
-                    } else if (curTimer < 360) {
+                    } else if (curTimer < 359) {
                         newTimer = 360
-                    } else if (curTimer < 420) {
+                    } else if (curTimer < 419) {
                         newTimer = 420
-                    } else if (curTimer < 480) {
+                    } else if (curTimer < 479) {
                         newTimer = 480
                     } else {
                         newTimer = 60
@@ -384,7 +383,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 </div>
 <div class="attr button-timer">
 <p class="attr-title">Timer</p>
-<p class="attr-value var-timer">0</p>
+<p class="attr-value var-timer">Off</p>
 </div>
 </div>
 <div class="op-row">
@@ -434,14 +433,13 @@ Natural
         fanboxa.querySelector('.var-angle').textContent = angle
 
         // Timer
-        let timer_display = '0m'
+        let timer_display = 'Off'
         if(delay_off_countdown) {
             let total_mins = delay_off_countdown
             if (model !== 'dmaker.fan.p5') {
                 total_mins = total_mins / 60
             }
 
-            total_mins += 1
             let hours = Math.floor(total_mins / 60)
             let mins = Math.floor(total_mins % 60)
             if(hours) {
@@ -466,7 +464,7 @@ Natural
             activeElement.classList.remove('active')
         }
 
-        // State
+        // Power
         activeElement = fanboxa.querySelector('.fanbox')
         if (state === 'on') {
             if (activeElement.classList.contains('active') === false) {
