@@ -71,12 +71,16 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
+            
+            // State toggle event bindings
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
                 hass.callService('fan', 'toggle', {
                     entity_id: entityId
                 });
             }
+
+            // Fan speed toggle event bindings
             ui.querySelector('.var-speed').onclick = () => {
                 this.log('Speed Level')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -113,6 +117,8 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
+
+            // Fan angle toggle event bindings
             ui.querySelector('.button-angle').onclick = () => {
                 this.log('Angle Level')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -137,10 +143,10 @@ class FanXiaomi extends HTMLElement {
                 }
             }
 
+            // Timer toggle event bindings
             ui.querySelector('.button-timer').onclick = () => {
                 this.log('Timer')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
-
                     let u = ui.querySelector('.var-timer')
 
                     let curTimer
@@ -149,7 +155,7 @@ class FanXiaomi extends HTMLElement {
                     if (timeParts.length > 1) {
                         curTimer = parseInt(timeParts[0].replace(/\D/g ,'')) * 60
                             + parseInt(timeParts[1].replace(/\D/g ,''))
-                    }else {
+                    } else {
                         curTimer = parseInt(timeParts[0].replace(/\D/g ,''))
                     }
 
@@ -180,6 +186,7 @@ class FanXiaomi extends HTMLElement {
                 }
             }
 
+            // Child lock event bindings
             ui.querySelector('.button-childlock').onclick = () => {
                 this.log('Child lock')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -194,6 +201,8 @@ class FanXiaomi extends HTMLElement {
                     }
                 }
             }
+
+            // Natural mode event bindings
             ui.querySelector('.var-natural').onclick = () => {
                 this.log('Natural')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -211,6 +220,8 @@ class FanXiaomi extends HTMLElement {
                     }
                 }
             }
+
+            // Oscillation toggle event bindings
             ui.querySelector('.var-oscillating').onclick = () => {
                 this.log('Oscillate')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
@@ -509,7 +520,7 @@ Natural
             iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-5-box-outline"></ha-icon>'
         }
 
-        // Natural
+        // Natural mode
         activeElement = fanboxa.querySelector('.var-natural')
         if (natural_speed) {
             if (activeElement.classList.contains('active') === false) {
