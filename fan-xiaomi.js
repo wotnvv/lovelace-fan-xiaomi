@@ -440,7 +440,6 @@ Natural
                 total_mins = total_mins / 60
             }
 
-            total_mins += 1
             let hours = Math.floor(total_mins / 60)
             let mins = Math.floor(total_mins % 60)
             if(hours) {
