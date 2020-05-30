@@ -77,21 +77,21 @@ class FanXiaomi extends HTMLElement {
                     let blades = ui.querySelector('.fanbox .blades')
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
-                    let icon = u.querySelector('.icon-waper > ha-icon')
+                    let icon = u.querySelector('.icon-waper > ha-icon').getAttribute('icon')
                     let newSpeed
-                    if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
+                    if (icon == "mdi:numeric-1-box-outline") {
                         newSpeed = 'Level 2'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
                         blades.className = 'blades level2'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
+                    } else if (icon == "mdi:numeric-2-box-outline") {
                         newSpeed = 'Level 3'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
                         blades.className = 'blades level3'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
+                    } else if (icon == "mdi:numeric-3-box-outline") {
                         newSpeed = 'Level 4'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
                         blades.className = 'blades level4'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
+                    } else if (icon == "mdi:numeric-4-box-outline") {
                         newSpeed = 'Level 1'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                         blades.className = 'blades level1'
@@ -108,19 +108,20 @@ class FanXiaomi extends HTMLElement {
 
             // Fan angle toggle event bindings
             ui.querySelector('.button-angle').onclick = () => {
-                this.log('Angle Level')
+                this.log('Oscillation Angle')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let b = ui.querySelector('.button-angle')
                     if (!b.classList.contains('loading')) {
                         let u = ui.querySelector('.var-angle')
+                        let oldAngleText = u.innerHTML
                         let newAngle
-                        if (u.innerHTML == '30') {
+                        if (oldAngleText == '30') {
                             newAngle = 60
-                        } else if (u.innerHTML == '60') {
+                        } else if (oldAngleText == '60') {
                             newAngle = 90
-                        } else if (u.innerHTML == '90') {
+                        } else if (oldAngleText == '90') {
                             newAngle = 120
-                        } else if (u.innerHTML == '120') {
+                        } else if (oldAngleText == '120') {
                             newAngle = 30
                         } else {
                             newAngle = 30
