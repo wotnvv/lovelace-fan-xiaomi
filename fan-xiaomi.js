@@ -96,9 +96,11 @@ class FanXiaomi extends HTMLElement {
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                         blades.className = 'blades level1'
                     } else {
-                        this.log('Error setting fan speed')
+                        this.error(`Error setting fan speed. icon = ${icon}`)
                         newSpeed = 'Level 1'
+                        this.error(`Defaulting to ${newSpeed}`)
                     }
+                    this.log(`Set speed to: ${newSpeed}`)
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
                         speed: newSpeed
@@ -124,12 +126,14 @@ class FanXiaomi extends HTMLElement {
                         } else if (oldAngleText == '120') {
                             newAngle = 30
                         } else {
+                            this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
                             newAngle = 30
-                            this.log('Error setting fan angle')
+                            this.error(`Defaulting to ${newAngle}`)
                         }
                         u.innerHTML = newAngle
                         b.classList.add('loading')
                         
+                        this.log(`Set angle to: ${newAngle}`)
                         hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
                             angle: newAngle
                         });
@@ -172,7 +176,9 @@ class FanXiaomi extends HTMLElement {
                         } else if (currTimer < 479) {
                             newTimer = 480
                         } else {
+                            this.error(`Error setting timer. u.textContent = ${u.textContent}; currTimer = ${currTimer}`)
                             newTimer = 60
+                            this.error(`Defaulting to ${newTimer}`)
                         }
 
                         // Update timer display
@@ -191,6 +197,7 @@ class FanXiaomi extends HTMLElement {
                         u.textContent = timer_display
                         b.classList.add('loading')
                         
+                        this.log(`Set timer to: ${newTimer}`)
                         hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                             delay_off_countdown: newTimer
                         });
@@ -208,12 +215,16 @@ class FanXiaomi extends HTMLElement {
                         let oldChildLockState = u.innerHTML
                         let newAngle
                         if (oldChildLockState == 'On') {
+                            this.log(`Set child lock to: Off`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
                             u.innerHTML = 'Off'
                         } else if (oldChildLockState == 'Off') {
+                            this.log(`Set child lock to: On`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
                             u.innerHTML = 'On'
                         } else {
+                            this.error(`Error setting child lock. oldChildLockState = ${oldChildLockState}`)
+                            this.error(`Defaulting to Off`)
                             u.innerHTML = 'Off'
                         }
                         b.classList.add('loading')
@@ -227,11 +238,13 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-natural')
                     if (u.classList.contains('active') === false) {
+                        this.log(`Set natural mode to: On`)
                         u.classList.add('active')
                         hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
                             entity_id: entityId
                         });
                     } else {
+                        this.log(`Set natural mode to: Off`)
                         u.classList.remove('active')
                         hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
                             entity_id: entityId
@@ -246,12 +259,14 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-oscillating')
                     if (u.classList.contains('active') === false) {
+                        this.log(`Set oscillation to: On`)
                         u.classList.add('active')
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
                             oscillating: true
                         });
                     } else {
+                        this.log(`Set oscillation to: Off`)
                         u.classList.remove('active')
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
@@ -529,9 +544,9 @@ Natural
         let speedRegexpMatch = speedRegexp.exec(speed)
         let speedLevel = speedRegexpMatch[1]
         if (speedLevel === undefined) {
-            this.log(`Unable to parse speed level: ${speed}`)
-            this.log('Defaulting to speed: Level 1')
+            this.error(`Unable to parse speed level: ${speed}`)
             speedLevel = 1
+            this.error(`Defaulting to ${speedLevel}`)
         }
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
         activeElement = fanboxa.querySelector('.fanbox .blades')
@@ -547,7 +562,9 @@ Natural
             } else if (mode === 'normal') {
                 natural_speed = false
             } else {
+                this.error(`Unrecognized mode for dmaker.fan.p5 when updating natural mode state: ${mode}`)
                 natural_speed = false
+                this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
         }
         if (natural_speed) {
