@@ -78,28 +78,24 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
                     let icon = u.querySelector('.icon-waper > ha-icon').getAttribute('icon')
-                    let newSpeed
+                    let newSpeedLevel
                     if (icon == "mdi:numeric-1-box-outline") {
-                        newSpeed = 'Level 2'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
-                        blades.className = 'blades level2'
+                        newSpeedLevel = 2
                     } else if (icon == "mdi:numeric-2-box-outline") {
-                        newSpeed = 'Level 3'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
-                        blades.className = 'blades level3'
+                        newSpeedLevel = 3
                     } else if (icon == "mdi:numeric-3-box-outline") {
-                        newSpeed = 'Level 4'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
-                        blades.className = 'blades level4'
+                        newSpeedLevel = 4
                     } else if (icon == "mdi:numeric-4-box-outline") {
-                        newSpeed = 'Level 1'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
-                        blades.className = 'blades level1'
+                        newSpeedLevel = 1
                     } else {
                         this.error(`Error setting fan speed. icon = ${icon}`)
-                        newSpeed = 'Level 1'
-                        this.error(`Defaulting to ${newSpeed}`)
+                        newSpeedLevel = 1
+                        this.error(`Defaulting to: ${newSpeedLevel}`)
                     }
+                    iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${newSpeedLevel}-box-outline"></ha-icon>`
+                    blades.className = `blades level${newSpeedLevel}`
+
+                    let newSpeed = `Level ${newSpeedLevel}`
                     this.log(`Set speed to: ${newSpeed}`)
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
