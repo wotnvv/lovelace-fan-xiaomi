@@ -573,6 +573,12 @@ Natural
     log() {
         // console.log(...arguments)
     }
+    warn() {
+        // console.log(...arguments)
+    }
+    error() {
+        console.error(...arguments)
+    }
 }
 
 customElements.define('fan-xiaomi', FanXiaomi);
