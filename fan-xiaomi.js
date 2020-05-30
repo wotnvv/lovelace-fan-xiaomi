@@ -205,13 +205,16 @@ class FanXiaomi extends HTMLElement {
                     let b = ui.querySelector('.button-childlock')
                     if (!b.classList.contains('loading')) {
                         let u = ui.querySelector('.var-childlock')
+                        let oldChildLockState = u.innerHTML
                         let newAngle
-                        if (u.innerHTML == 'On') {
+                        if (oldChildLockState == 'On') {
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
                             u.innerHTML = 'Off'
-                        } else {
+                        } else if (oldChildLockState == 'Off') {
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
                             u.innerHTML = 'On'
+                        } else {
+                            u.innerHTML = 'Off'
                         }
                         b.classList.add('loading')
                     }
