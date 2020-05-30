@@ -78,28 +78,24 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
                     let icon = u.querySelector('.icon-waper > ha-icon').getAttribute('icon')
-                    let newSpeed
-                    if (icon == "mdi:numeric-1-box-outline") {
-                        newSpeed = 'Level 2'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
-                        blades.className = 'blades level2'
-                    } else if (icon == "mdi:numeric-2-box-outline") {
-                        newSpeed = 'Level 3'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
-                        blades.className = 'blades level3'
-                    } else if (icon == "mdi:numeric-3-box-outline") {
-                        newSpeed = 'Level 4'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
-                        blades.className = 'blades level4'
-                    } else if (icon == "mdi:numeric-4-box-outline") {
-                        newSpeed = 'Level 1'
-                        iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
-                        blades.className = 'blades level1'
+                    let newSpeedLevel
+                    if (icon === "mdi:numeric-1-box-outline") {
+                        newSpeedLevel = 2
+                    } else if (icon === "mdi:numeric-2-box-outline") {
+                        newSpeedLevel = 3
+                    } else if (icon === "mdi:numeric-3-box-outline") {
+                        newSpeedLevel = 4
+                    } else if (icon === "mdi:numeric-4-box-outline") {
+                        newSpeedLevel = 1
                     } else {
                         this.error(`Error setting fan speed. icon = ${icon}`)
-                        newSpeed = 'Level 1'
-                        this.error(`Defaulting to ${newSpeed}`)
+                        newSpeedLevel = 1
+                        this.error(`Defaulting to: ${newSpeedLevel}`)
                     }
+                    iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${newSpeedLevel}-box-outline"></ha-icon>`
+                    blades.className = `blades level${newSpeedLevel}`
+
+                    let newSpeed = `Level ${newSpeedLevel}`
                     this.log(`Set speed to: ${newSpeed}`)
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
@@ -117,13 +113,13 @@ class FanXiaomi extends HTMLElement {
                         let u = ui.querySelector('.var-angle')
                         let oldAngleText = u.innerHTML
                         let newAngle
-                        if (oldAngleText == '30') {
+                        if (oldAngleText === '30') {
                             newAngle = 60
-                        } else if (oldAngleText == '60') {
+                        } else if (oldAngleText === '60') {
                             newAngle = 90
-                        } else if (oldAngleText == '90') {
+                        } else if (oldAngleText === '90') {
                             newAngle = 120
-                        } else if (oldAngleText == '120') {
+                        } else if (oldAngleText === '120') {
                             newAngle = 30
                         } else {
                             this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
@@ -214,11 +210,11 @@ class FanXiaomi extends HTMLElement {
                         let u = ui.querySelector('.var-childlock')
                         let oldChildLockState = u.innerHTML
                         let newAngle
-                        if (oldChildLockState == 'On') {
+                        if (oldChildLockState === 'On') {
                             this.log(`Set child lock to: Off`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
                             u.innerHTML = 'Off'
-                        } else if (oldChildLockState == 'Off') {
+                        } else if (oldChildLockState === 'Off') {
                             this.log(`Set child lock to: On`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
                             u.innerHTML = 'On'
@@ -397,7 +393,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <p class="var-title">Playground</p>
 </div>
 <div class="fanbox">
-<div class="blades ">
+<div class="blades">
 <div class="b1 ang1"></div>
 <div class="b2 ang25"></div>
 <div class="b3 ang49"></div>
