@@ -79,13 +79,13 @@ class FanXiaomi extends HTMLElement {
                     let iconSpan = u.querySelector('.icon-waper')
                     let icon = u.querySelector('.icon-waper > ha-icon').getAttribute('icon')
                     let newSpeedLevel
-                    if (icon == "mdi:numeric-1-box-outline") {
+                    if (icon === "mdi:numeric-1-box-outline") {
                         newSpeedLevel = 2
-                    } else if (icon == "mdi:numeric-2-box-outline") {
+                    } else if (icon === "mdi:numeric-2-box-outline") {
                         newSpeedLevel = 3
-                    } else if (icon == "mdi:numeric-3-box-outline") {
+                    } else if (icon === "mdi:numeric-3-box-outline") {
                         newSpeedLevel = 4
-                    } else if (icon == "mdi:numeric-4-box-outline") {
+                    } else if (icon === "mdi:numeric-4-box-outline") {
                         newSpeedLevel = 1
                     } else {
                         this.error(`Error setting fan speed. icon = ${icon}`)
@@ -113,13 +113,13 @@ class FanXiaomi extends HTMLElement {
                         let u = ui.querySelector('.var-angle')
                         let oldAngleText = u.innerHTML
                         let newAngle
-                        if (oldAngleText == '30') {
+                        if (oldAngleText === '30') {
                             newAngle = 60
-                        } else if (oldAngleText == '60') {
+                        } else if (oldAngleText === '60') {
                             newAngle = 90
-                        } else if (oldAngleText == '90') {
+                        } else if (oldAngleText === '90') {
                             newAngle = 120
-                        } else if (oldAngleText == '120') {
+                        } else if (oldAngleText === '120') {
                             newAngle = 30
                         } else {
                             this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
@@ -210,11 +210,11 @@ class FanXiaomi extends HTMLElement {
                         let u = ui.querySelector('.var-childlock')
                         let oldChildLockState = u.innerHTML
                         let newAngle
-                        if (oldChildLockState == 'On') {
+                        if (oldChildLockState === 'On') {
                             this.log(`Set child lock to: Off`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
                             u.innerHTML = 'Off'
-                        } else if (oldChildLockState == 'Off') {
+                        } else if (oldChildLockState === 'Off') {
                             this.log(`Set child lock to: On`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
                             u.innerHTML = 'On'
