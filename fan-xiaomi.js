@@ -397,7 +397,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <p class="var-title">Playground</p>
 </div>
 <div class="fanbox">
-<div class="blades ">
+<div class="blades">
 <div class="b1 ang1"></div>
 <div class="b2 ang25"></div>
 <div class="b3 ang49"></div>
