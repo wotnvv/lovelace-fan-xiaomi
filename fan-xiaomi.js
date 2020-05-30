@@ -546,6 +546,8 @@ Natural
                 natural_speed = true
             } else if (mode === 'normal') {
                 natural_speed = false
+            } else {
+                natural_speed = false
             }
         }
         if (natural_speed) {
