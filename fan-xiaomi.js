@@ -97,6 +97,7 @@ class FanXiaomi extends HTMLElement {
                         blades.className = 'blades level1'
                     } else {
                         this.log('Error setting fan speed')
+                        newSpeed = 'Level 1'
                     }
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
@@ -123,7 +124,7 @@ class FanXiaomi extends HTMLElement {
                             newAngle = 30
                         } else {
                             newAngle = 30
-                            //this.log('Error setting fan angle')
+                            this.log('Error setting fan angle')
                         }
                         u.innerHTML = newAngle
                         b.classList.add('loading')
