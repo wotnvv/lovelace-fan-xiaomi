@@ -521,7 +521,14 @@ Natural
             activeElement.classList.remove('active')
         }
         // let direct_speed_int = Number(direct_speed)
-        let speedLevel = speed[speed.length - 1]
+        let speedRegexp = /Level (\d)/g
+        let speedRegexpMatch = speedRegexp.exec(speed)
+        let speedLevel = speedRegexpMatch[1]
+        if (speedLevel === undefined) {
+            this.log(`Unable to parse speed level: ${speed}`)
+            this.log('Defaulting to speed: Level 1')
+            speedLevel = 1
+        }
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
         activeElement = fanboxa.querySelector('.fanbox .blades')
         activeElement.className = `blades level${speedLevel}`
