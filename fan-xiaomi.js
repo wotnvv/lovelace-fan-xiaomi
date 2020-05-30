@@ -77,27 +77,30 @@ class FanXiaomi extends HTMLElement {
                     let blades = ui.querySelector('.fanbox .blades')
                     let u = ui.querySelector('.var-speed')
                     let iconSpan = u.querySelector('.icon-waper')
-                    let icon = u.querySelector('.icon-waper > ha-icon')
+                    let icon = u.querySelector('.icon-waper > ha-icon').getAttribute('icon')
                     let newSpeed
-                    if (icon.getAttribute('icon') == "mdi:numeric-1-box-outline") {
+                    if (icon == "mdi:numeric-1-box-outline") {
                         newSpeed = 'Level 2'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-2-box-outline"></ha-icon>'
                         blades.className = 'blades level2'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-2-box-outline") {
+                    } else if (icon == "mdi:numeric-2-box-outline") {
                         newSpeed = 'Level 3'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-3-box-outline"></ha-icon>'
                         blades.className = 'blades level3'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-3-box-outline") {
+                    } else if (icon == "mdi:numeric-3-box-outline") {
                         newSpeed = 'Level 4'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-4-box-outline"></ha-icon>'
                         blades.className = 'blades level4'
-                    } else if (icon.getAttribute('icon') == "mdi:numeric-4-box-outline") {
+                    } else if (icon == "mdi:numeric-4-box-outline") {
                         newSpeed = 'Level 1'
                         iconSpan.innerHTML = '<ha-icon icon="mdi:numeric-1-box-outline"></ha-icon>'
                         blades.className = 'blades level1'
                     } else {
-                        this.log('Error setting fan speed')
+                        this.error(`Error setting fan speed. icon = ${icon}`)
+                        newSpeed = 'Level 1'
+                        this.error(`Defaulting to ${newSpeed}`)
                     }
+                    this.log(`Set speed to: ${newSpeed}`)
                     hass.callService('fan', 'set_speed', {
                         entity_id: entityId,
                         speed: newSpeed
@@ -107,27 +110,30 @@ class FanXiaomi extends HTMLElement {
 
             // Fan angle toggle event bindings
             ui.querySelector('.button-angle').onclick = () => {
-                this.log('Angle Level')
+                this.log('Oscillation Angle')
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let b = ui.querySelector('.button-angle')
                     if (!b.classList.contains('loading')) {
                         let u = ui.querySelector('.var-angle')
+                        let oldAngleText = u.innerHTML
                         let newAngle
-                        if (u.innerHTML == '30') {
+                        if (oldAngleText == '30') {
                             newAngle = 60
-                        } else if (u.innerHTML == '60') {
+                        } else if (oldAngleText == '60') {
                             newAngle = 90
-                        } else if (u.innerHTML == '90') {
+                        } else if (oldAngleText == '90') {
                             newAngle = 120
-                        } else if (u.innerHTML == '120') {
+                        } else if (oldAngleText == '120') {
                             newAngle = 30
                         } else {
+                            this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
                             newAngle = 30
-                            //this.log('Error setting fan angle')
+                            this.error(`Defaulting to ${newAngle}`)
                         }
                         u.innerHTML = newAngle
                         b.classList.add('loading')
                         
+                        this.log(`Set angle to: ${newAngle}`)
                         hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
                             angle: newAngle
                         });
@@ -170,7 +176,9 @@ class FanXiaomi extends HTMLElement {
                         } else if (currTimer < 479) {
                             newTimer = 480
                         } else {
+                            this.error(`Error setting timer. u.textContent = ${u.textContent}; currTimer = ${currTimer}`)
                             newTimer = 60
+                            this.error(`Defaulting to ${newTimer}`)
                         }
 
                         // Update timer display
@@ -189,6 +197,7 @@ class FanXiaomi extends HTMLElement {
                         u.textContent = timer_display
                         b.classList.add('loading')
                         
+                        this.log(`Set timer to: ${newTimer}`)
                         hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                             delay_off_countdown: newTimer
                         });
@@ -203,13 +212,20 @@ class FanXiaomi extends HTMLElement {
                     let b = ui.querySelector('.button-childlock')
                     if (!b.classList.contains('loading')) {
                         let u = ui.querySelector('.var-childlock')
+                        let oldChildLockState = u.innerHTML
                         let newAngle
-                        if (u.innerHTML == 'On') {
+                        if (oldChildLockState == 'On') {
+                            this.log(`Set child lock to: Off`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_off')
                             u.innerHTML = 'Off'
-                        } else {
+                        } else if (oldChildLockState == 'Off') {
+                            this.log(`Set child lock to: On`)
                             hass.callService('fan', 'xiaomi_miio_set_child_lock_on')
                             u.innerHTML = 'On'
+                        } else {
+                            this.error(`Error setting child lock. oldChildLockState = ${oldChildLockState}`)
+                            this.error(`Defaulting to Off`)
+                            u.innerHTML = 'Off'
                         }
                         b.classList.add('loading')
                     }
@@ -222,11 +238,13 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-natural')
                     if (u.classList.contains('active') === false) {
+                        this.log(`Set natural mode to: On`)
                         u.classList.add('active')
                         hass.callService('fan', 'xiaomi_miio_set_natural_mode_on', {
                             entity_id: entityId
                         });
                     } else {
+                        this.log(`Set natural mode to: Off`)
                         u.classList.remove('active')
                         hass.callService('fan', 'xiaomi_miio_set_natural_mode_off', {
                             entity_id: entityId
@@ -241,12 +259,14 @@ class FanXiaomi extends HTMLElement {
                 if (ui.querySelector('.fanbox').classList.contains('active')) {
                     let u = ui.querySelector('.var-oscillating')
                     if (u.classList.contains('active') === false) {
+                        this.log(`Set oscillation to: On`)
                         u.classList.add('active')
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
                             oscillating: true
                         });
                     } else {
+                        this.log(`Set oscillation to: Off`)
                         u.classList.remove('active')
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
@@ -520,7 +540,14 @@ Natural
             activeElement.classList.remove('active')
         }
         // let direct_speed_int = Number(direct_speed)
-        let speedLevel = speed[speed.length - 1]
+        let speedRegexp = /Level (\d)/g
+        let speedRegexpMatch = speedRegexp.exec(speed)
+        let speedLevel = speedRegexpMatch[1]
+        if (speedLevel === undefined) {
+            this.error(`Unable to parse speed level: ${speed}`)
+            speedLevel = 1
+            this.error(`Defaulting to ${speedLevel}`)
+        }
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
         activeElement = fanboxa.querySelector('.fanbox .blades')
         activeElement.className = `blades level${speedLevel}`
@@ -534,6 +561,10 @@ Natural
                 natural_speed = true
             } else if (mode === 'normal') {
                 natural_speed = false
+            } else {
+                this.error(`Unrecognized mode for dmaker.fan.p5 when updating natural mode state: ${mode}`)
+                natural_speed = false
+                this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
         }
         if (natural_speed) {
@@ -564,6 +595,12 @@ Natural
     // Add to logs
     log() {
         // console.log(...arguments)
+    }
+    warn() {
+        // console.log(...arguments)
+    }
+    error() {
+        console.error(...arguments)
     }
 }
 
