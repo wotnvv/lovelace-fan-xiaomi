@@ -131,6 +131,7 @@ class FanXiaomi extends HTMLElement {
                         
                         this.log(`Set angle to: ${newAngle}`)
                         hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
+                            entity_id: entityId,
                             angle: newAngle
                         });
                     }
@@ -195,6 +196,7 @@ class FanXiaomi extends HTMLElement {
                         
                         this.log(`Set timer to: ${newTimer}`)
                         hass.callService('fan', 'xiaomi_miio_set_delay_off', {
+                            entity_id: entityId,
                             delay_off_countdown: newTimer
                         });
                     }
