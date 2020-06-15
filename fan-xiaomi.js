@@ -540,7 +540,10 @@ Natural
         // let direct_speed_int = Number(direct_speed)
         let speedRegexp = /Level (\d)/g
         let speedRegexpMatch = speedRegexp.exec(speed)
-        let speedLevel = speedRegexpMatch[1]
+        let speedLevel
+        if (speedRegexpMatch && speedRegexpMatch.length > 0) {
+            speedLevel = speedRegexpMatch[1]
+        }
         if (speedLevel === undefined) {
             this.error(`Unable to parse speed level: ${speed}`)
             speedLevel = 1
