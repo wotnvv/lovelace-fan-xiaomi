@@ -172,6 +172,8 @@ class FanXiaomi extends HTMLElement {
                             newTimer = 420
                         } else if (currTimer < 479) {
                             newTimer = 480
+                        } else if (currTimer = 480) {
+                            newTimer = 0
                         } else {
                             this.error(`Error setting timer. u.textContent = ${u.textContent}; currTimer = ${currTimer}`)
                             newTimer = 60
