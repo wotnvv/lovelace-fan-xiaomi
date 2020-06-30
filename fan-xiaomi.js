@@ -120,6 +120,8 @@ class FanXiaomi extends HTMLElement {
                         } else if (oldAngleText === '90') {
                             newAngle = 120
                         } else if (oldAngleText === '120') {
+                            newAngle = 140
+                        } else if (oldAngleText === '140') {
                             newAngle = 30
                         } else {
                             this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
