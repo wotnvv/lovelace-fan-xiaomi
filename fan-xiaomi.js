@@ -120,7 +120,11 @@ class FanXiaomi extends HTMLElement {
                         } else if (oldAngleText === '90') {
                             newAngle = 120
                         } else if (oldAngleText === '120') {
-                            newAngle = 140
+                            if (attrs['model'] === 'dmaker.fan.p5') {
+                                newAngle = 140
+                            } else {
+                                newAngle = 30
+                            }
                         } else if (oldAngleText === '140') {
                             newAngle = 30
                         } else {
