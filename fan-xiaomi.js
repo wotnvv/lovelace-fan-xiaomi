@@ -120,6 +120,12 @@ class FanXiaomi extends HTMLElement {
                         } else if (oldAngleText === '90') {
                             newAngle = 120
                         } else if (oldAngleText === '120') {
+                            if (attrs['model'] === 'dmaker.fan.p5') {
+                                newAngle = 140
+                            } else {
+                                newAngle = 30
+                            }
+                        } else if (oldAngleText === '140') {
                             newAngle = 30
                         } else {
                             this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
