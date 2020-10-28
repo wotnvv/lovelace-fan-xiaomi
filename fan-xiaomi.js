@@ -1,6 +1,6 @@
 class FanXiaomi extends HTMLElement {
     supportedAttributes = {
-        angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 3
+        angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, natural_speed_reporting: true
     }
 
     set hass(hass) {
@@ -32,10 +32,12 @@ class FanXiaomi extends HTMLElement {
             this.supportedAttributes.childLock = false;
             this.supportedAttributes.rotationAngle = false;
             this.supportedAttributes.speedLevels = 3;
+            this.supportedAttributes.natural_speed = false;
+            this.supportedAttributes.natural_speed_reporting = false;
         }
 
         if (attrs['model'] === 'dmaker.fan.p5'){
-            this.supportedAttributes.angle = false;
+            this.supportedAttributes.natural_speed_reporting = false;
         }
 
 
@@ -100,7 +102,7 @@ class FanXiaomi extends HTMLElement {
                     } else if (icon === "mdi:numeric-2-box-outline") {
                         newSpeedLevel = 3
                     } else if (icon === "mdi:numeric-3-box-outline") {
-                        newSpeedLevel = this.supportedAttributes.speedLevels = 3 ? 1 : 4
+                        newSpeedLevel = this.supportedAttributes.speedLevels == 3 ? 1 : 4
                     } else if (icon === "mdi:numeric-4-box-outline") {
                         newSpeedLevel = 1
                     } else {
@@ -588,7 +590,7 @@ Natural
         activeElement = fanboxa.querySelector('.var-natural')
 
          //p5 does not report direct_speed and natural_speed
-        if (this.supportedAttributes.angle) {
+        if (!this.supportedAttributes.natural_speed_reporting && this.supportedAttributes.natural_speed) {
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
@@ -599,12 +601,15 @@ Natural
                 this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
         }
-        if (natural_speed) {
-            if (activeElement.classList.contains('active') === false) {
-                activeElement.classList.add('active')
+        if (this.supportedAttributes.natural_speed) {
+            if (natural_speed) {
+                if (activeElement.classList.contains('active') === false) {
+                    activeElement.classList.add('active')
+                }
+            } else {
+                activeElement.classList.remove('active')
             }
         } else {
-            activeElement.classList.remove('active')
             activeElement.style.display='none'
         }
 
