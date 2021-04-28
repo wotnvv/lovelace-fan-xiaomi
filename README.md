@@ -18,7 +18,7 @@ Xiaomi Smartmi Fan Lovelace card for HASS/Home Assistant.
 - Timer duration
 
 ## Requirements
-- [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) v0.2.0
+- [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) v0.3.3
 
 ## HACS Installation
 Search for `Xiaomi Smartmi Fan Card`
