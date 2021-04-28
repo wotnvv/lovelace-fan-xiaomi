@@ -34,9 +34,9 @@ Search for `Xiaomi Smartmi Fan Card`
     ```
 1. Add the following to your Lovelace config `views.cards` key
     ```yaml
-    - entity: fan.entity_id
-      name: Fan Name
-      type: 'custom:fan-xiaomi'
+    entity: fan.entity_id
+    name: Fan Name
+    type: 'custom:fan-xiaomi'
     ```
     Replace `fan.entity_id` with your fan's entity_id and `Fan Name` with any name you'd like to name your fan with
 
