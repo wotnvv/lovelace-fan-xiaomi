@@ -1,4 +1,8 @@
 class FanXiaomi extends HTMLElement {
+    supportedAttributes = {
+        angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, natural_speed_reporting: true
+    }
+
     set hass(hass) {
         const entityId = this.config.entity;
         const style = this.config.style || '';
@@ -22,6 +26,20 @@ class FanXiaomi extends HTMLElement {
         }
 
         const attrs = state.attributes;
+
+        if (attrs['model'] === 'dmaker.fan.1c'){
+            this.supportedAttributes.angle = false;
+            this.supportedAttributes.childLock = false;
+            this.supportedAttributes.rotationAngle = false;
+            this.supportedAttributes.speedLevels = 3;
+            this.supportedAttributes.natural_speed = false;
+            this.supportedAttributes.natural_speed_reporting = false;
+        }
+
+        if (attrs['model'] === 'dmaker.fan.p5'){
+            this.supportedAttributes.natural_speed_reporting = false;
+        }
+
 
         if (!this.card) {
             const card = document.createElement('ha-card');
@@ -61,7 +79,7 @@ class FanXiaomi extends HTMLElement {
                     });
                 }
             }
-            
+
             // Power toggle event bindings
             ui.querySelector('.c1').onclick = () => {
                 this.log('Toggle')
@@ -84,7 +102,7 @@ class FanXiaomi extends HTMLElement {
                     } else if (icon === "mdi:numeric-2-box-outline") {
                         newSpeedLevel = 3
                     } else if (icon === "mdi:numeric-3-box-outline") {
-                        newSpeedLevel = 4
+                        newSpeedLevel = this.supportedAttributes.speedLevels == 3 ? 1 : 4
                     } else if (icon === "mdi:numeric-4-box-outline") {
                         newSpeedLevel = 1
                     } else {
@@ -134,7 +152,7 @@ class FanXiaomi extends HTMLElement {
                         }
                         u.innerHTML = newAngle
                         b.classList.add('loading')
-                        
+
                         this.log(`Set angle to: ${newAngle}`)
                         hass.callService('fan', 'xiaomi_miio_set_oscillation_angle', {
                             entity_id: entityId,
@@ -201,7 +219,7 @@ class FanXiaomi extends HTMLElement {
                         }
                         u.textContent = timer_display
                         b.classList.add('loading')
-                        
+
                         this.log(`Set timer to: ${newTimer}`)
                         hass.callService('fan', 'xiaomi_miio_set_delay_off', {
                             entity_id: entityId,
@@ -427,7 +445,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 </span>
 </div>
 </div>
-<div class="attr-row">
+<div class="attr-row childlock-container">
 <div class="attr button-childlock">
 <p class="attr-title">Child Lock</p>
 <p class="attr-value var-childlock">0</p>
@@ -478,7 +496,7 @@ Natural
         speed, mode, model
     }) {
         fanboxa.querySelector('.var-title').textContent = title
-        
+
         // Child Lock
         if (child_lock) {
             fanboxa.querySelector('.var-childlock').textContent = 'On'
@@ -487,10 +505,17 @@ Natural
         }
         fanboxa.querySelector('.button-childlock').classList.remove('loading')
 
+        if (!this.supportedAttributes.childLock) {
+            fanboxa.querySelector('.childlock-container').style.display = 'none'
+        }
+
         // Angle
-        fanboxa.querySelector('.var-angle').textContent = angle
-        fanboxa.querySelector('.button-angle').classList.remove('loading')
-        
+        if (this.supportedAttributes.angle){
+            fanboxa.querySelector('.var-angle').textContent = angle
+            fanboxa.querySelector('.button-angle').classList.remove('loading')
+        } else {
+            fanboxa.querySelector('.button-angle').style.display = 'none'
+        }
 
         // Timer
         let timer_display = 'Off'
@@ -565,7 +590,7 @@ Natural
         activeElement = fanboxa.querySelector('.var-natural')
 
          //p5 does not report direct_speed and natural_speed
-        if (model === 'dmaker.fan.p5') {
+        if (!this.supportedAttributes.natural_speed_reporting && this.supportedAttributes.natural_speed) {
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
@@ -576,12 +601,16 @@ Natural
                 this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
         }
-        if (natural_speed) {
-            if (activeElement.classList.contains('active') === false) {
-                activeElement.classList.add('active')
+        if (this.supportedAttributes.natural_speed) {
+            if (natural_speed) {
+                if (activeElement.classList.contains('active') === false) {
+                    activeElement.classList.add('active')
+                }
+            } else {
+                activeElement.classList.remove('active')
             }
         } else {
-            activeElement.classList.remove('active')
+            activeElement.style.display='none'
         }
 
         // Oscillation
@@ -598,6 +627,19 @@ Natural
             activeElement.classList.remove('active')
             fb.classList.remove('oscillation')
         }
+
+        //Left and Right
+        if (!this.supportedAttributes.rotationAngle) {
+            fanboxa.querySelector('.left').style.display = 'none'
+            fanboxa.querySelector('.right').style.display = 'none'
+        }
+
+        // Fan Animation
+        if (!this.config.show_animation) {
+            fanboxa.querySelector('.fanbox').style.display = 'none'
+            this.card.style.height = '170px'
+        }
+
     }
 /*********************************** UI Settings ************************************/
 
