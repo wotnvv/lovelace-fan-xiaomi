@@ -451,7 +451,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <div class="attr-row childlock-container">
 <div class="attr button-childlock">
 <p class="attr-title">Child Lock</p>
-<p class="attr-value var-childlock">0</p>
+<p class="attr-value var-childlock">Off</p>
 </div>
 <div class="attr button-angle">
 <p class="attr-title">Angle(&deg;)</p>
@@ -581,9 +581,7 @@ Natural
             speedLevel = speedRegexpMatch[1]
         }
         if (speedLevel === undefined) {
-            this.error(`Unable to parse speed level: ${speed}`)
             speedLevel = 1
-            this.error(`Defaulting to ${speedLevel}`)
         }
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
         activeElement = fanboxa.querySelector('.fanbox .blades')
@@ -638,7 +636,7 @@ Natural
         }
 
         // Fan Animation
-        if (!this.config.show_animation) {
+        if (this.config.disable_animation) {
             fanboxa.querySelector('.fanbox').style.display = 'none'
             this.card.style.height = '170px'
         }

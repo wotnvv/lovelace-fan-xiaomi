@@ -34,7 +34,7 @@ Search for `Xiaomi Smartmi Fan Card`
     - url: /community_plugin/lovelace-fan-xiaomi/fan-xiaomi.js
       type: js
     ```
-
+    
 ## Card Configuration
 
 Example of Lovelace config `views.cards` key
@@ -48,9 +48,9 @@ platform: xiaomi_miio_airpurifier
 |-------------------------|------------------------|-------------------------------------------------|
 | `entity_id`             |      n\a               | Specify Xiaomi miio fan entity_id               |
 | `name`                  |      n\a               | Fan name to be show for on card                 |
-| `type`                  |`custom:fan-xiaomi`     | Mandatory card type specification               |
-| `show_animation`        | `True`                 | Flag that defines whether to show fan animation |
-| `platform`              |`xiaomi_miio_fan`       | For [Xiaomi Mi Air Purifier & Xiaomi Mi Air Humidifier Integration](https://github.com/syssi/xiaomi_airpurifier) you must specify `xiaomi_miio_airpurifier`, if [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) is used then can specify `xiaomi_miio_fan` or can ommit it. |
+| `type`                  | `custom:fan-xiaomi`    | Mandatory card type specification               |
+| `disable_animation`     | `False`                | Flag that defines whether to disable fan image  |
+| `platform`              | `xiaomi_miio_fan`      | For [Xiaomi Mi Air Purifier & Xiaomi Mi Air Humidifier Integration](https://github.com/syssi/xiaomi_airpurifier) you must specify `xiaomi_miio_airpurifier`, if [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) is used then can specify `xiaomi_miio_fan` or can ommit it. |
 
 ## Preview
 ![](preview.gif)
