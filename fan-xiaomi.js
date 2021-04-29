@@ -39,6 +39,8 @@ class FanXiaomi extends HTMLElement {
         if (attrs['model'] === 'dmaker.fan.p5'){
             this.supportedAttributes.natural_speed_reporting = false;
         }
+        
+        var platform = this.config.platform || 'xiaomi_miio_fan';
 
 
         if (!this.card) {
@@ -154,7 +156,7 @@ class FanXiaomi extends HTMLElement {
                         b.classList.add('loading')
 
                         this.log(`Set angle to: ${newAngle}`)
-                        hass.callService('xiaomi_miio_fan', 'fan_set_oscillation_angle', {
+                        hass.callService(platform, 'fan_set_oscillation_angle', {
                             entity_id: entityId,
                             angle: newAngle
                         });
@@ -221,13 +223,14 @@ class FanXiaomi extends HTMLElement {
                         b.classList.add('loading')
 
                         this.log(`Set timer to: ${newTimer}`)
-                        hass.callService('xiaomi_miio_fan', 'fan_set_delay_off', {
+                        hass.callService(platform, 'fan_set_delay_off', {
                             entity_id: entityId,
                             delay_off_countdown: newTimer
                         });
                     }
                 }
             }
+            
 
             // Child lock event bindings
             ui.querySelector('.button-childlock').onclick = () => {
@@ -240,11 +243,11 @@ class FanXiaomi extends HTMLElement {
                         let newAngle
                         if (oldChildLockState === 'On') {
                             this.log(`Set child lock to: Off`)
-                            hass.callService('xiaomi_miio_fan', 'fan_set_child_lock_off')
+                            hass.callService(platform, 'fan_set_child_lock_off')
                             u.innerHTML = 'Off'
                         } else if (oldChildLockState === 'Off') {
                             this.log(`Set child lock to: On`)
-                            hass.callService('xiaomi_miio_fan', 'fan_set_child_lock_on')
+                            hass.callService(platform, 'fan_set_child_lock_on')
                             u.innerHTML = 'On'
                         } else {
                             this.error(`Error setting child lock. oldChildLockState = ${oldChildLockState}`)
@@ -264,13 +267,13 @@ class FanXiaomi extends HTMLElement {
                     if (u.classList.contains('active') === false) {
                         this.log(`Set natural mode to: On`)
                         u.classList.add('active')
-                        hass.callService('xiaomi_miio_fan', 'fan_set_natural_mode_on', {
+                        hass.callService(platform, 'fan_set_natural_mode_on', {
                             entity_id: entityId
                         });
                     } else {
                         this.log(`Set natural mode to: Off`)
                         u.classList.remove('active')
-                        hass.callService('xiaomi_miio_fan', 'fan_set_natural_mode_off', {
+                        hass.callService(platform, 'fan_set_natural_mode_off', {
                             entity_id: entityId
                         });
                     }
