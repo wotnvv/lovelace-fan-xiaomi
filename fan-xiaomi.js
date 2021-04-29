@@ -578,9 +578,7 @@ Natural
             speedLevel = speedRegexpMatch[1]
         }
         if (speedLevel === undefined) {
-            this.error(`Unable to parse speed level: ${speed}`)
             speedLevel = 1
-            this.error(`Defaulting to ${speedLevel}`)
         }
         iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${speedLevel}-box-outline"></ha-icon>`
         activeElement = fanboxa.querySelector('.fanbox .blades')
