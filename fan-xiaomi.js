@@ -31,15 +31,20 @@ class FanXiaomi extends HTMLElement {
             card.appendChild(ui)
 
             // Check if fan is disconnected
-            if(state === undefined){
+            if(state === undefined || state.state === 'unavailable'){
                 card.classList.add('offline');
                 this.card = card;
                 this.appendChild(card);
-                ui.querySelector('.var-title').textContent = this.config.name + ' (Disconnected)';
+                ui.querySelector('.var-title').textContent = (this.config.name || '') + ' (Disconnected)';
                 return;
             }
         }
-
+        
+        if (state.state === 'unavailable'){
+            ui.querySelector('.var-title').textContent = (this.config.name || '') + ' (Disconnected)';
+            return;
+        }
+        
         const attrs = state.attributes;
 
         if (attrs['model'] === 'dmaker.fan.1c'){
