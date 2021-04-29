@@ -1,4 +1,19 @@
+const LitElement = Object.getPrototypeOf(
+  customElements.get("ha-panel-lovelace")
+);
+const html = LitElement.prototype.html;
+const includeDomains = ["fan"];
+
 class FanXiaomi extends HTMLElement {
+    
+    static getConfigElement() {
+        return document.createElement("content-card-editor");
+    }
+    
+    static getStubConfig() {
+        return { entity: "fan.fan", name: "Xiaomi Fan", platform: "xiaomi_miio_airpurifier", disable_animation: false }
+    }
+    
     supportedAttributes = {
         angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, natural_speed_reporting: true
     }
@@ -657,3 +672,108 @@ Natural
 }
 
 customElements.define('fan-xiaomi', FanXiaomi);
+
+const OptionsPlatform = [
+  'xiaomi_miio_fan',
+  'xiaomi_miio_airpurifier',
+];
+
+class ContentCardEditor extends LitElement {
+
+  setConfig(config) {
+    this.config = config;
+  }
+
+  static get properties() {
+      return {
+          hass: {},
+          config: {}
+      };
+  }
+  render() {
+    var fanRE = new RegExp("fan\.")
+    return html`
+    <div class="card-config">
+      <paper-input
+          label="${this.hass.localize("ui.panel.lovelace.editor.card.generic.title")} (${this.hass.localize("ui.panel.lovelace.editor.card.config.optional")})"
+          .value="${this.config.name}"
+          .configValue="${"name"}"
+          @value-changed="${this._valueChanged}"
+      ></paper-input>
+      <ha-formfield label="Disable animation">
+        <ha-switch
+          .checked=${this.config.disable_animation}
+          .configValue="${'disable_animation'}"
+          @change=${this._valueChanged}
+        ></ha-switch>
+      </ha-formfield>
+      <paper-dropdown-menu
+        label="Platform"
+        .configValue=${'platform'}
+        @value-changed=${this._valueChanged}
+        class="dropdown"
+        >
+        <paper-listbox
+          slot="dropdown-content"
+          .selected=${(Object.values(OptionsPlatform).indexOf(this.config.platform))}
+        >
+          ${(Object.values(OptionsPlatform)).map(item => html` <paper-item>${item}</paper-item> `)}
+        </paper-listbox>
+      </paper-dropdown-menu>
+      <ha-entity-picker
+        .label="${this.hass.localize(
+          "ui.panel.lovelace.editor.card.generic.entity"
+        )} (${this.hass.localize(
+          "ui.panel.lovelace.editor.card.config.required"
+        )})"
+        .hass=${this.hass}
+        .value=${this.config.entity}
+        .configValue=${"entity"}
+        .includeDomains=${includeDomains}
+        @change=${this._valueChanged}
+        allow-custom-entity
+      ></ha-entity-picker>
+    </div>
+    `
+  }
+  _focusEntity(e){
+    // const target = e.target;
+    e.target.value = ''
+  }
+  
+  _valueChanged(e) {
+    if (!this.config || !this.hass) {
+      return;
+    }
+    const { target } = e;
+    if (target.configValue) {
+      if (target.value === '') {
+        delete this.config[target.configValue];
+      } else {
+        this.config = {
+          ...this.config,
+          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
+        };
+      }
+    }
+    this.configChanged(this.config)
+  }
+
+  configChanged(newConfig) {
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true
+    });
+    event.detail = {config: newConfig};
+    this.dispatchEvent(event);
+  }
+}
+
+customElements.define("content-card-editor", ContentCardEditor);
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "fan-xiaomi",
+  name: "Xiaomi Fan Lovelace Card",
+  preview: true,
+  description: "Xiaomi Smartmi Fan Lovelace card for HASS/Home Assistant."
+});
