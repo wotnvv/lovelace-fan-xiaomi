@@ -11,7 +11,7 @@ class FanXiaomi extends HTMLElement {
     }
     
     static getStubConfig() {
-        return { entity: "fan.fan", name: "Xiaomi Fan", platform: "xiaomi_miio_airpurifier", disable_animation: false }
+        return { entity: "fan.fan", name: "Xiaomi Fan", platform: "xiaomi_miio_airpurifier", disable_animation: false, disable_immediate_UI: true }
     }
     
     supportedAttributes = {
@@ -24,7 +24,9 @@ class FanXiaomi extends HTMLElement {
         const myname = this.config.name;
         const state = hass.states[entityId];
         const ui = this.getUI();
-
+        const platform = this.config.platform || 'xiaomi_miio_fan';
+        const disable_immediate_UI = this.config.disable_immediate_UI;
+        
         if (!this.card){
             const card = document.createElement('ha-card');
             card.className = 'fan-xiaomi'
@@ -60,7 +62,7 @@ class FanXiaomi extends HTMLElement {
             this.supportedAttributes.natural_speed_reporting = false;
         }
         
-        var platform = this.config.platform || 'xiaomi_miio_fan';
+        
 
 
         if (!this.card) {
@@ -132,9 +134,10 @@ class FanXiaomi extends HTMLElement {
                         newSpeedLevel = 1
                         this.error(`Defaulting to: ${newSpeedLevel}`)
                     }
-                    iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${newSpeedLevel}-box-outline"></ha-icon>`
-                    blades.className = `blades level${newSpeedLevel}`
-
+                    if (!disable_immediate_UI) {
+                        iconSpan.innerHTML = `<ha-icon icon="mdi:numeric-${newSpeedLevel}-box-outline"></ha-icon>`
+                        blades.className = `blades level${newSpeedLevel}`
+                    }
                     let newSpeed = `Level ${newSpeedLevel}`
                     this.log(`Set speed to: ${newSpeed}`)
                     hass.callService('fan', 'set_speed', {
@@ -172,7 +175,9 @@ class FanXiaomi extends HTMLElement {
                             newAngle = 30
                             this.error(`Defaulting to ${newAngle}`)
                         }
-                        u.innerHTML = newAngle
+                        if (!disable_immediate_UI) {
+                            u.innerHTML = newAngle
+                        }
                         b.classList.add('loading')
 
                         this.log(`Set angle to: ${newAngle}`)
@@ -239,7 +244,9 @@ class FanXiaomi extends HTMLElement {
                         } else {
                             timer_display = `${mins}m`
                         }
-                        u.textContent = timer_display
+                        if (!disable_immediate_UI) {
+                            u.textContent = timer_display
+                        }
                         b.classList.add('loading')
 
                         this.log(`Set timer to: ${newTimer}`)
@@ -260,18 +267,22 @@ class FanXiaomi extends HTMLElement {
                     if (!b.classList.contains('loading')) {
                         let u = ui.querySelector('.var-childlock')
                         let oldChildLockState = u.innerHTML
-                        let newAngle
                         if (oldChildLockState === 'On') {
                             this.log(`Set child lock to: Off`)
                             hass.callService(platform, 'fan_set_child_lock_off')
-                            u.innerHTML = 'Off'
+                            if (!disable_immediate_UI) {
+                                u.innerHTML = 'Off'
+                            }
                         } else if (oldChildLockState === 'Off') {
                             this.log(`Set child lock to: On`)
                             hass.callService(platform, 'fan_set_child_lock_on')
-                            u.innerHTML = 'On'
+                            if (!disable_immediate_UI) {
+                                u.innerHTML = 'On'
+                            }
                         } else {
                             this.error(`Error setting child lock. oldChildLockState = ${oldChildLockState}`)
                             this.error(`Defaulting to Off`)
+                            hass.callService(platform, 'fan_set_child_lock_off')
                             u.innerHTML = 'Off'
                         }
                         b.classList.add('loading')
@@ -286,13 +297,17 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-natural')
                     if (u.classList.contains('active') === false) {
                         this.log(`Set natural mode to: On`)
-                        u.classList.add('active')
+                        if (!disable_immediate_UI) {
+                            u.classList.add('active')
+                        }
                         hass.callService(platform, 'fan_set_natural_mode_on', {
                             entity_id: entityId
                         });
                     } else {
                         this.log(`Set natural mode to: Off`)
-                        u.classList.remove('active')
+                        if (!disable_immediate_UI) {
+                            u.classList.remove('active')
+                        }
                         hass.callService(platform, 'fan_set_natural_mode_off', {
                             entity_id: entityId
                         });
@@ -307,14 +322,18 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-oscillating')
                     if (u.classList.contains('active') === false) {
                         this.log(`Set oscillation to: On`)
-                        u.classList.add('active')
+                        if (!disable_immediate_UI) {
+                            u.classList.add('active')
+                        }
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
                             oscillating: true
                         });
                     } else {
                         this.log(`Set oscillation to: Off`)
-                        u.classList.remove('active')
+                        if (!disable_immediate_UI) {
+                            u.classList.remove('active')
+                        }
                         hass.callService('fan', 'oscillate', {
                             entity_id: entityId,
                             oscillating: false
@@ -709,6 +728,13 @@ class ContentCardEditor extends LitElement {
         <ha-switch
           .checked=${this.config.disable_animation}
           .configValue="${'disable_animation'}"
+          @change=${this._valueChanged}
+        ></ha-switch>
+      </ha-formfield>
+      <ha-formfield label="Disable immediate UI">
+        <ha-switch
+          .checked=${this.config.disable_immediate_UI}
+          .configValue="${'disable_immediate_UI'}"
           @change=${this._valueChanged}
         ></ha-switch>
       </ha-formfield>
