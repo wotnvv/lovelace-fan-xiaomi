@@ -46,11 +46,12 @@ platform: xiaomi_miio_airpurifier
 ```
 | Card attribute          | Default                | Description                                     |
 |-------------------------|------------------------|-------------------------------------------------|
-| `entity_id`             |      n\a               | Specify Xiaomi miio fan entity_id               |
-| `name`                  |      n\a               | Fan name to be show for on card                 |
-| `type`                  | `custom:fan-xiaomi`    | Mandatory card type specification               |
-| `disable_animation`     | `False`                | Flag that defines whether to disable fan image  |
-| `platform`              | `xiaomi_miio_fan`      | For [Xiaomi Mi Air Purifier & Xiaomi Mi Air Humidifier Integration](https://github.com/syssi/xiaomi_airpurifier) you must specify `xiaomi_miio_airpurifier`, if [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) is used then can specify `xiaomi_miio_fan` or can ommit it. |
+| `entity_id`             |      n\a               | Mandatory: Specify Xiaomi miio fan entity_id               |
+| `name`                  |      n\a               | Optional: Fan name to be show for on card                 |
+| `type`                  | `custom:fan-xiaomi`    | Mandatory: card type specification               |
+| `disable_animation`     | `False`                | Optional: Flag that defines whether to disable fan image  |
+| `disable_immediate_UI`  | `False`                | Optional: Flag that defines whether to disable immediate UI changes. In this case, UI is changed only when entity really changes the state.  |
+| `platform`              | `xiaomi_miio_fan`      | Optional: For [Xiaomi Mi Air Purifier & Xiaomi Mi Air Humidifier Integration](https://github.com/syssi/xiaomi_airpurifier) you must specify `xiaomi_miio_airpurifier`, if [Xiaomi Mi Smart Pedestal Fan Integration](https://github.com/syssi/xiaomi_fan) is used then can specify `xiaomi_miio_fan` or can ommit it. |
 
 ## Preview
 ![](preview.gif)
