@@ -619,14 +619,14 @@ Natural
         // Natural mode
         activeElement = fanboxa.querySelector('.var-natural')
 
-         //p5 does not report direct_speed and natural_speed
+         //p* fans do not report direct_speed and natural_speed
         if (!this.supportedAttributes.natural_speed_reporting && this.supportedAttributes.natural_speed) {
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
                 natural_speed = false
             } else {
-                this.error(`Unrecognized mode for dmaker.fan.p5 when updating natural mode state: ${mode}`)
+                this.error(`Unrecognized mode for ${model} when updating natural mode state: ${mode}`)
                 natural_speed = false
                 this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
