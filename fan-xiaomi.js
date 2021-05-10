@@ -552,7 +552,8 @@ Natural
         let timer_display = 'Off'
         if(delay_off_countdown) {
             let total_mins = delay_off_countdown
-            if (model !== 'dmaker.fan.p5') {
+            
+            if (['dmaker.fan.p15', 'dmaker.fan.p11', 'dmaker.fan.p10', 'dmaker.fan.p9', 'dmaker.fan.p5'].indexOf(model) === -1) {
                 total_mins = total_mins / 60
             }
 
