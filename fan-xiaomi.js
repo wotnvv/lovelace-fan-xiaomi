@@ -15,7 +15,7 @@ class FanXiaomi extends HTMLElement {
     }
     
     supportedAttributes = {
-        angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, natural_speed_reporting: true
+        angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, natural_speed_reporting: true, supported_angles: [30, 60, 90, 120]
     }
 
     set hass(hass) {
@@ -58,13 +58,15 @@ class FanXiaomi extends HTMLElement {
             this.supportedAttributes.natural_speed_reporting = false;
         }
 
-        if (attrs['model'] === 'dmaker.fan.p5'){
+        if (['dmaker.fan.p15', 'dmaker.fan.p11', 'dmaker.fan.p10', 'dmaker.fan.p5'].includes(attrs['model'])){
             this.supportedAttributes.natural_speed_reporting = false;
+            this.supportedAttributes.supported_angles = [30, 60, 90, 120, 140];
+        }
+        if (['dmaker.fan.p9'].includes(attrs['model'])){
+            this.supportedAttributes.natural_speed_reporting = false;
+            this.supportedAttributes.supported_angles = [30, 60, 90, 120, 150];
         }
         
-        
-
-
         if (!this.card) {
             const card = document.createElement('ha-card');
             card.className = 'fan-xiaomi'
@@ -156,24 +158,11 @@ class FanXiaomi extends HTMLElement {
                         let u = ui.querySelector('.var-angle')
                         let oldAngleText = u.innerHTML
                         let newAngle
-                        if (oldAngleText === '30') {
-                            newAngle = 60
-                        } else if (oldAngleText === '60') {
-                            newAngle = 90
-                        } else if (oldAngleText === '90') {
-                            newAngle = 120
-                        } else if (oldAngleText === '120') {
-                            if (attrs['model'] === 'dmaker.fan.p5') {
-                                newAngle = 140
-                            } else {
-                                newAngle = 30
-                            }
-                        } else if (oldAngleText === '140') {
-                            newAngle = 30
+                        let curAngleIndex = this.supportedAttributes.supported_angles.indexOf(parseInt(oldAngleText,10))
+                        if (curAngleIndex >= 0 && curAngleIndex < this.supportedAttributes.supported_angles.length-1) {
+                            newAngle = this.supportedAttributes.supported_angles[curAngleIndex+1]
                         } else {
-                            this.error(`Error setting fan angle. oldAngleText = ${oldAngleText}`)
-                            newAngle = 30
-                            this.error(`Defaulting to ${newAngle}`)
+                            newAngle = this.supportedAttributes.supported_angles[0]
                         }
                         if (!disable_immediate_UI) {
                             u.innerHTML = newAngle
@@ -563,7 +552,8 @@ Natural
         let timer_display = 'Off'
         if(delay_off_countdown) {
             let total_mins = delay_off_countdown
-            if (model !== 'dmaker.fan.p5') {
+            
+            if (['dmaker.fan.p15', 'dmaker.fan.p11', 'dmaker.fan.p10', 'dmaker.fan.p9', 'dmaker.fan.p5'].indexOf(model) === -1) {
                 total_mins = total_mins / 60
             }
 
@@ -629,14 +619,14 @@ Natural
         // Natural mode
         activeElement = fanboxa.querySelector('.var-natural')
 
-         //p5 does not report direct_speed and natural_speed
+         //p* fans do not report direct_speed and natural_speed
         if (!this.supportedAttributes.natural_speed_reporting && this.supportedAttributes.natural_speed) {
             if (mode === 'nature') {
                 natural_speed = true
             } else if (mode === 'normal') {
                 natural_speed = false
             } else {
-                this.error(`Unrecognized mode for dmaker.fan.p5 when updating natural mode state: ${mode}`)
+                this.error(`Unrecognized mode for ${model} when updating natural mode state: ${mode}`)
                 natural_speed = false
                 this.error(`Defaulting to natural_speed = ${natural_speed}`)
             }
