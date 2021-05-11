@@ -66,6 +66,11 @@ class FanXiaomi extends HTMLElement {
             this.supportedAttributes.natural_speed_reporting = false;
             this.supportedAttributes.supported_angles = [30, 60, 90, 120, 150];
         }
+        if (['leshow.fan.ss4'].includes(attrs['model'])){
+            this.supportedAttributes.natural_speed_reporting = false;
+            this.supportedAttributes.rotationAngle = false;
+            this.supportedAttributes.childLock = false;
+        }
         
         if (!this.card) {
             const card = document.createElement('ha-card');
@@ -496,7 +501,7 @@ to{transform:perspective(10em) rotateY(40deg)}
 <span class="icon-waper">
 <ha-icon icon="mdi:numeric-0-box-outline"></ha-icon>
 </span>
-Speed Level
+Speed
 </button>
 </div>
 <div class="op var-oscillating">
