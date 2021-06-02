@@ -56,7 +56,7 @@ class FanXiaomi extends HTMLElement {
 
         if (attrs['model'] === 'dmaker.fan.1c'){
             this.supportedAttributes.angle = false;
-            this.supportedAttributes.childLock = false;
+            this.supportedAttributes.childLock = true;
             this.supportedAttributes.rotationAngle = false;
             this.supportedAttributes.speedLevels = 3;
             this.supportedAttributes.natural_speed = false;
