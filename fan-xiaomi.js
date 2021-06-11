@@ -4,6 +4,32 @@ const LitElement = Object.getPrototypeOf(
 const html = LitElement.prototype.html;
 const includeDomains = ["fan"];
 
+
+function fireEvent(ev, detail, entity = null) {
+    ev = new Event(ev, {
+        bubbles: true,
+        cancelable: false,
+        composed: true,
+    });
+    ev.detail = detail || {};
+    if (entity) {
+        entity.dispatchEvent(ev);
+    } else {
+        var root = lovelace_view();
+        if (root) root.dispatchEvent(ev);
+    }
+}
+
+function moreInfo(entity, large = false) {
+    const root =
+        document.querySelector("hc-main") ||
+        document.querySelector("home-assistant");
+    fireEvent("hass-more-info", { entityId: entity }, root);
+    const el = root._moreInfoEl;
+    el.large = large;
+    return el;
+}
+
 class FanXiaomi extends HTMLElement {
     
     static getConfigElement() {
@@ -16,7 +42,7 @@ class FanXiaomi extends HTMLElement {
     
     supportedAttributes = {
         angle: true, childLock: true, timer: true, rotationAngle: true, speedLevels: 4, natural_speed: true, 
-            natural_speed_reporting: true, supported_angles: [30, 60, 90, 120], sleep_mode: false
+            natural_speed_reporting: true, supported_angles: [30, 60, 90, 120], sleep_mode: false, led: false
     }
 
     set hass(hass) {
@@ -57,12 +83,13 @@ class FanXiaomi extends HTMLElement {
             this.supportedAttributes.childLock = true;
             this.supportedAttributes.rotationAngle = false;
             this.supportedAttributes.speedLevels = 3;
-            this.supportedAttributes.natural_speed = false;
+            this.supportedAttributes.natural_speed = true;
             this.supportedAttributes.natural_speed_reporting = false;
         }
         if (['dmaker.fan.p15', 'dmaker.fan.p11', 'dmaker.fan.p10', 'dmaker.fan.p5'].includes(attrs['model'])){
             this.supportedAttributes.natural_speed_reporting = false;
             this.supportedAttributes.supported_angles = [30, 60, 90, 120, 140];
+            //this.supportedAttributes.led = true;
         }
         if (['dmaker.fan.p9'].includes(attrs['model'])){
             this.supportedAttributes.natural_speed_reporting = false;
@@ -130,15 +157,6 @@ class FanXiaomi extends HTMLElement {
                 hass.callService('fan', 'toggle', {
                     entity_id: entityId
                 });
-            }
-            //Fan title works as on/off button when animation is disabled
-            if (this.config.disable_animation) {
-                ui.querySelector('.title').onclick = () => {
-                    this.log('Toggle')
-                    hass.callService('fan', 'toggle', {
-                        entity_id: entityId
-                    });
-                }
             }
 
             // Fan speed toggle event bindings
@@ -318,6 +336,25 @@ class FanXiaomi extends HTMLElement {
                 }
             }
 
+            // LED mode event bindings
+            ui.querySelector('.var-led').onclick = () => {
+                this.log('Led')
+                if (ui.querySelector('.fanbox').classList.contains('active')) {
+                    let u = ui.querySelector('.var-led')
+                    if (u.classList.contains('active') === false) {
+                        this.log(`Set led mode to: On`)
+                        hass.callService(platform, 'fan_set_led_on', {
+                            entity_id: entityId
+                        });
+                    } else {
+                        this.log(`Set led mode to: Off`)
+                        hass.callService(platform, 'fan_set_led_off', {
+                            entity_id: entityId
+                        });
+                    }
+                }
+            }
+
             // Oscillation toggle event bindings
             ui.querySelector('.var-oscillating').onclick = () => {
                 this.log('Oscillate')
@@ -338,10 +375,26 @@ class FanXiaomi extends HTMLElement {
                     }
                 }
             }
+            
+            //Fan title works as on/off button when animation is disabled
+            if (this.config.disable_animation) {
+                ui.querySelector('.var-title').onclick = () => {
+                    this.log('Toggle')
+                    hass.callService('fan', 'toggle', {
+                        entity_id: entityId
+                    });
+                }
+            } else {
+                ui.querySelector('.var-title').onclick = () => {
+                    this.log('Dialog box')
+                    moreInfo(entityId);
+                }
+            }
+            /*
             ui.querySelector('.var-title').onclick = () => {
                 this.log('Dialog box')
                 card.querySelector('.dialog').style.display = 'block'
-            }
+            }*/
             this.card = card;
             this.appendChild(card);
         }
@@ -361,6 +414,7 @@ class FanXiaomi extends HTMLElement {
             speed: attrs['speed'],
             mode: attrs['mode'],
             model: attrs['model'],
+            led: attrs['led']
         })
     }
 
@@ -531,6 +585,14 @@ Natural
 Sleep
 </button>
 </div>
+<div class="op var-led">
+<button>
+<span class="icon-waper">
+<ha-icon icon="mdi:lightbulb-outline"></ha-icon>
+</span>
+LED
+</button>
+</div>
 </div>
 `
         return fanbox
@@ -540,7 +602,7 @@ Sleep
 
     setUI(fanboxa, {title, natural_speed, direct_speed, raw_speed, state,
         child_lock, oscillating, led_brightness, delay_off_countdown, angle,
-        speed, mode, model
+        speed, mode, model, led
     }) {
         fanboxa.querySelector('.var-title').textContent = title
 
@@ -612,6 +674,19 @@ Sleep
             }
         } else {
             activeElement.classList.remove('active')
+        }
+        activeElement = fanboxa.querySelector('.var-led')
+        if (this.supportedAttributes.led) {
+            if (led) {
+                if (activeElement.classList.contains('active') === false) {
+                    activeElement.classList.add('active')
+                }
+            } else {
+                activeElement.classList.remove('active')
+            }
+        } else
+        {
+            activeElement.style.display='none'
         }
 
         // Power
