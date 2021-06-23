@@ -339,15 +339,15 @@ class FanXiaomi extends HTMLElement {
                         this.log(`Set sleep mode to: On`)
                         hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            field: 'fan.set_preset_mode',
-                            value: 'Sleep'
+                            field: 'fan.mode',
+                            value: 2
                         });
                     } else {
                         this.log(`Set sleep mode to: Off`)
                         hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            field: 'fan.set_preset_mode',
-                            value: 'Straight Wind'
+                            field: 'fan.mode',
+                            value: 0
                         });
                     }
                 }
