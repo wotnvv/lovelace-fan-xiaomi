@@ -334,15 +334,17 @@ class FanXiaomi extends HTMLElement {
                     let u = ui.querySelector('.var-sleep')
                     if (u.classList.contains('active') === false) {
                         this.log(`Set sleep mode to: On`)
-                        hass.callService('fan', 'set_percentage', {
+                        hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            percentage: 1
+                            field: 'fan.set_preset_mode',
+                            value: 'Sleep'
                         });
                     } else {
                         this.log(`Set sleep mode to: Off`)
-                        hass.callService('fan', 'set_speed', {
+                        hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            speed: 'low'
+                            field: 'fan.set_preset_mode',
+                            value: 'Straight Wind'
                         });
                     }
                 }
