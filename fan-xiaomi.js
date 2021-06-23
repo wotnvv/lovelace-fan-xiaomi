@@ -94,6 +94,8 @@ class FanXiaomi extends HTMLElement {
         if (['dmaker.fan.p9'].includes(attrs['model'])){
             this.supportedAttributes.natural_speed_reporting = false;
             this.supportedAttributes.supported_angles = [30, 60, 90, 120, 150];
+            this.supportedAttributes.sleep_mode = true;
+
         }
         if (['leshow.fan.ss4'].includes(attrs['model'])){
             this.supportedAttributes.angle = false;
