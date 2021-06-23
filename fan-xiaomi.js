@@ -186,9 +186,10 @@ class FanXiaomi extends HTMLElement {
                     
 
                     this.log(`Set speed to: ${newSpeed}`)
-                    hass.callService('fan', 'set_speed', {
+                    hass.callService(platform, 'set_property', {
                         entity_id: entityId,
-                        speed: newSpeed
+                        field: 'fan.fan_level',
+                        value: newSpeedLevel
                     });
                 }
             }
