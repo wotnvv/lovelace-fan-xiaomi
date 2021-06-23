@@ -51,7 +51,7 @@ class FanXiaomi extends HTMLElement {
         const myname = this.config.name;
         const state = hass.states[entityId];
         const ui = this.getUI();
-        const platform = this.config.platform || 'xiaomi_miio_fan';
+        const platform = this.config.platform || 'xiaomi_miio_airpurifier';
         const use_standard_speeds = this.config.use_standard_speeds || false;
         const force_sleep_mode_support = this.config.force_sleep_mode_support || false;
         
