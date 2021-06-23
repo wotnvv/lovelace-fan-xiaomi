@@ -37,7 +37,7 @@ class FanXiaomi extends HTMLElement {
     }
     
     static getStubConfig() {
-        return { entity: "fan.fan", name: "Xiaomi Fan", platform: "xiaomi_miio_airpurifier", disable_animation: false }
+        return { entity: "fan.fan", name: "Xiaomi Fan", platform: "xiaomi_miot", disable_animation: false }
     }
     
     supportedAttributes = {
@@ -51,7 +51,7 @@ class FanXiaomi extends HTMLElement {
         const myname = this.config.name;
         const state = hass.states[entityId];
         const ui = this.getUI();
-        const platform = this.config.platform || 'xiaomi_miio_airpurifier';
+        const platform = this.config.platform || 'xiaomi_miot';
         const use_standard_speeds = this.config.use_standard_speeds || false;
         const force_sleep_mode_support = this.config.force_sleep_mode_support || false;
         
