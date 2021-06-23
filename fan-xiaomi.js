@@ -433,7 +433,8 @@ class FanXiaomi extends HTMLElement {
         //  angle: attrs['angle'],
             angle: attrs['fan.horizontal_angle'],
             speed: attrs['speed'],
-            mode: attrs['mode'],
+        //  mode: attrs['mode'],
+            mode: attrs['fan.mode'],
             model: attrs['model'],
             led: attrs['led']
         })
@@ -756,9 +757,11 @@ LED
         
          //p* fans do not report direct_speed and natural_speed
         if (!this.supportedAttributes.natural_speed_reporting && this.supportedAttributes.natural_speed) {
-            if (mode === 'nature') {
+//            if (mode === 'nature') {
+            if (mode === 1) {
                 natural_speed = true
-            } else if (mode === 'normal') {
+//            } else if (mode === 'normal') {
+            } else if (mode === 0) {
                 natural_speed = false
             } else {
                 this.error(`Unrecognized mode for ${model} when updating natural mode state: ${mode}`)
