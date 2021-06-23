@@ -419,7 +419,8 @@ class FanXiaomi extends HTMLElement {
         // Set and update UI parameters
         this.setUI(this.card.querySelector('.fan-xiaomi-panel'), {
             title: myname || attrs['friendly_name'],
-            natural_speed: attrs['natural_speed'],
+        //  natural_speed: attrs['natural_speed'],
+            natural_speed: attrs['preset_mode'],
             direct_speed: attrs['direct_speed'],
             raw_speed: attrs['raw_speed'],
             state: state.state,
