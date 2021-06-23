@@ -316,15 +316,15 @@ class FanXiaomi extends HTMLElement {
                         this.log(`Set natural mode to: On`)
                         hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            field: 'fan.set_preset_mode',
-                            value: 'Natural Wind'
+                            field: 'fan.mode',
+                            value: 1
                         });
                     } else {
                         this.log(`Set natural mode to: Off`)
                         hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            field: 'fan.set_preset_mode',
-                            value: 'Straight Wind'
+                            field: 'fan.mode',
+                            value: 0
                         });
                     }
                 }
