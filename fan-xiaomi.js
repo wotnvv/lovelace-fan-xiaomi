@@ -265,9 +265,10 @@ class FanXiaomi extends HTMLElement {
                         b.classList.add('loading')
 
                         this.log(`Set timer to: ${newTimer}`)
-                        hass.callService(platform, 'fan_set_delay_off', {
+                        hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            delay_off_countdown: newTimer
+                            field: 'fan.off_delay_time',
+                            value: newTimer
                         });
                     }
                 }
@@ -425,7 +426,8 @@ class FanXiaomi extends HTMLElement {
             child_lock: attrs['physical_controls_locked'],
             oscillating: attrs['oscillating'],
             led_brightness: attrs['led_brightness'],
-            delay_off_countdown: attrs['delay_off_countdown'],
+        //  delay_off_countdown: attrs['delay_off_countdown'],
+            delay_off_countdown: attrs['fan.off_delay_time'],
         //  angle: attrs['angle'],
             angle: attrs['fan.horizontal_angle'],
             speed: attrs['speed'],
