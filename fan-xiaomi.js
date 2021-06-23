@@ -287,13 +287,13 @@ class FanXiaomi extends HTMLElement {
                             entity_id: entityId,
                             field: 'physical_controls_locked',
                             value: false  
-                        } else if (oldChildLockState === 'Off') {
+                        })} else if (oldChildLockState === 'Off') {
                             this.log(`Set child lock to: On`)
                             hass.callService(platform, 'set_property', {
                             entity_id: entityId,
                             field: 'physical_controls_locked',
                             value: true  
-                        } else {
+                        })} else {
                             this.error(`Error setting child lock. oldChildLockState = ${oldChildLockState}`)
                             this.error(`Defaulting to Off`)
                             hass.callService(platform, 'fan_set_child_lock_off')
