@@ -211,9 +211,10 @@ class FanXiaomi extends HTMLElement {
                         b.classList.add('loading')
 
                         this.log(`Set angle to: ${newAngle}`)
-                        hass.callService(platform, 'fan_set_oscillation_angle', {
+                        hass.callService(platform, 'set_property', {
                             entity_id: entityId,
-                            angle: newAngle
+                            field: 'fan.horizontal_angle',
+                            value: newAngle
                         });
                     }
                 }
