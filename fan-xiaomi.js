@@ -786,7 +786,7 @@ LED
         activeElement = fanboxa.querySelector('.var-sleep')
         if (this.supportedAttributes.sleep_mode) {
          // if (raw_speed_int == 1) {
-            if (mode == 1) {
+            if (mode == 2) {
                 if (activeElement.classList.contains('active') === false) {
                     activeElement.classList.add('active')
                 }
