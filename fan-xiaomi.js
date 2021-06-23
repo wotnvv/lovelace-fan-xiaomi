@@ -179,7 +179,7 @@ class FanXiaomi extends HTMLElement {
                         newSpeed = newSpeedLevel
                     } else {
                         newSpeedLevel = (speedLevel < this.supportedAttributes.speedLevels ? speedLevel+1: 1)
-                        newSpeed = `Level ${newSpeedLevel}`
+                        newSpeed = `Level${newSpeedLevel}`
                     }
                     
 
